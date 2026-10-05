@@ -28,12 +28,38 @@ Lipton、Perez、Parikh/Batra/Lee 等人的写作建议整理而成。
 
 ## 安装
 
+使用 [`skills` CLI](https://github.com/vercel-labs/skills)（需要 Node.js），**在论文仓库的根目录**按需安装：
+
 ```bash
-# Claude Code（全局）
-cp -r icml-write icml-cite icml-review icml-rebuttal icml-camera-ready ~/.claude/skills/
-# 或项目级
-cp -r icml-* <project>/.claude/skills/
+cd <你的论文仓库>
+
+# 查看仓库里有哪些 skill
+npx skills add a-green-hand-jack/icml-skills --list
+
+# 只装当前阶段需要的 skill，例如写稿阶段：
+npx skills add a-green-hand-jack/icml-skills --skill icml-write icml-cite icml-review -a claude-code
+# 收到审稿意见后再加：
+npx skills add a-green-hand-jack/icml-skills --skill icml-rebuttal -a claude-code
+
+# 一次装全部五个
+npx skills add a-green-hand-jack/icml-skills --skill '*' -a claude-code
 ```
+
+- **每个 skill 都可以单独安装。** 每个 skill 目录自带所需的 `references/` 和 `scripts/`，不依赖其他
+  skill 是否安装；它们之间只通过论文仓库里的 `.icml/` 共享状态。
+- `-a` 指定 agent：`claude-code` 装到 `.claude/skills/`，其他常用值有 `codex`、`cursor`、`opencode`、
+  `gemini-cli`；省略时 CLI 会自动检测或询问。
+- 安装会在仓库根目录生成 `skills-lock.json`，记录每个 skill 的来源与版本。建议把它和 skill 目录
+  一起提交，合作者 clone 后即可使用同一版本。
+- 更新：`npx skills update -p`；卸载：`npx skills remove icml-cite`。
+- 没有 Node.js 时，可以手动复制单个 skill：`cp -r icml-review <你的论文仓库>/.claude/skills/`。
+
+**不建议加 `-g` 全局安装**，原因如下：
+
+- 这些 skill 的触发描述刻意写得很宽（例如“看一下我的论文”“清理我的 bib”“make my intro better”）。
+  全局安装后，它们会在与 ICML 无关的项目里抢触发。
+- `icml-venue-facts.md` 绑定某一年的 ICML 规则。项目级安装让每篇论文锁定自己投稿周期的版本，
+  更新一个仓库不会影响另一篇还在审稿或 rebuttal 中的论文。
 
 依赖：Python 3（脚本只用标准库）。建议安装 TeX Live（pdflatex、bibtex）和 poppler-utils
 （pdftotext、pdfinfo、pdffonts）；没有时相关检查会跳过并提示。`icml-cite` 需要访问
