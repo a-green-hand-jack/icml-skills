@@ -1,29 +1,29 @@
-# 撰写 ICML Lay Summary
+# Writing an ICML Lay Summary
 
-ICML 自 2025 年起要求接收的论文提交 lay（通俗语言）摘要。2026 年的指南重复了 2025 年的建议；请查看当年的博客文章。
+ICML has required accepted papers to submit a lay (plain-language) summary since 2025. The 2026 guidelines repeat the 2025 recommendations; please consult the blog post for that year.
 
-## 要求（2026）
-- 最多 10 句话 / 200 词。
-- 科学记者应该能够理解。
-- 具体：读起来不能像是描述任何其他 ICML 论文。
-- 目的：让子领域之外的人产生兴趣并扩大论文的受众 — 就像论文的预告片。
+## Requirements (2026)
+- At most 10 sentences / 200 words.
+- A science journalist should be able to understand it.
+- Specific: it must not read like a description that could apply to any other ICML paper.
+- Purpose: generate interest from people outside the subfield and broaden the paper's audience — like a trailer for the paper.
 
-## 有效的结构
-1. **日常问题**（1–2 句话）：用非专业人士能理解的语言描述出了什么问题或尚不清楚，具体场景优于抽象描述。
-2. **为什么困难或现有方法为何不足**（1 句话）。
-3. **作者做了什么**（1–2 句话）：核心思想用类比或通俗描述表达，不使用术语。
-4. **他们发现了什么**（1–2 句话）：主要结果，尽可能给出一个具体、有意义的数字或对比。
-5. **为什么重要**（1–2 句话）：谁可以使用它，它改变了什么，以及如果结果可能被过度解读，需诚实说明其局限。
+## Effective Structure
+1. **Everyday problem** (1–2 sentences): describe what is wrong or still unclear in language a non-expert can understand; a concrete scenario is better than an abstract description.
+2. **Why it is hard or why existing methods fall short** (1 sentence).
+3. **What the authors did** (1–2 sentences): the core idea expressed with an analogy or plain description, without jargon.
+4. **What they found** (1–2 sentences): the main result, giving a specific, meaningful number or comparison if possible.
+5. **Why it matters** (1–2 sentences): who can use it, what it changes, and an honest statement of limitations if the result could be over-interpreted.
 
-## 对 agent 的规则
-- 从 `.icml/claims.md` 中已批准的声明起草；不要添加声明或比论文支持的措辞更强。通俗读者容易过度泛化，因此需明确说明范围（"在模拟机器人中"、"针对英文文本"）。
-- 将每个技术术语替换为它的功能描述（"一个预测下一个词的模型"，而非 "autoregressive language model"）；如果某个术语必不可少，用不超过五个词解释它。
-- 不使用炒作词汇（breakthrough、revolutionary、human-like），不使用拟人化表达。
-- 主动语态，短句，具体名词。
-- 在交付前统计词数和句数。
-- 提供两个版本（例如，一个以问题开头，一个以发现开头），让作者选择和编辑。
+## Rules for the Agent
+- Draft from approved claims in `.icml/claims.md`; do not add claims or use stronger wording than the paper supports. Lay readers tend to over-generalize, so state the scope explicitly ("in simulated robots", "for English text").
+- Replace every technical term with a functional description ("a model that predicts the next word", not "autoregressive language model"); if a term is essential, explain it in at most five words.
+- No hype words (breakthrough, revolutionary, human-like), no anthropomorphic expressions.
+- Active voice, short sentences, concrete nouns.
+- Count words and sentences before delivery.
+- Provide two versions (e.g., one starting with a problem, one starting with a finding) so the authors can choose and edit.
 
-## 自检
-- 读者能否知道*这篇*论文发现了什么，而不仅仅是它的主题？
-- 记者能否引用任何一句话而不会误代表结果？
-- 每个数字都在台账中吗？
+## Self-Check
+- Can the reader know what *this* paper discovered, not just its topic?
+- Can a journalist quote any sentence without misrepresenting the result?
+- Is every number in the ledger?

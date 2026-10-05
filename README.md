@@ -1,96 +1,82 @@
-# ICML 论文写作 Skill Family
+# ICML Paper-Writing Skill Family
 
-面向 coding agent（Claude Code 等）的一组 ICML 论文 skill，覆盖从研究仓库到 camera-ready 的完整周期。
-基于 ICML 2026 官方规则（快照日期 2026-10-05）以及 Nanda、Farquhar、Foerster、Gopen & Swan、
-Lipton、Perez、Parikh/Batra/Lee 等人的写作建议整理而成。
+A family of ICML paper skills for coding agents (Claude Code, etc.), covering the full lifecycle from research repository to camera-ready.
+Compiled from the ICML 2026 official rules (snapshot date 2026-10-05) and writing advice from Nanda, Farquhar, Foerster, Gopen & Swan, Lipton, Perez, Parikh/Batra/Lee, and others.
 
-## 五个 skill
+## Five Skills
 
-| Skill | 何时触发 | 核心产出 | 强制停下等人的点 |
+| Skill | When to Trigger | Core Output | Mandatory Human Stop Points |
 |---|---|---|---|
-| `icml-write` | 从仓库起草、修改已有稿、迁移到 ICML 格式 | 主张账本、段落大纲、带 `% TL;DR` 注释的正文 | ① 主张与摘要 ② 大纲、图表规划、页数预算 ③ 逻辑断层的真实解释 |
-| `icml-cite` | 找文献、生成 BibTeX、核对参考文献 | 核验过的 `.bib` 与核验日志 | 无法核验的引用是否保留 |
-| `icml-review` | 投稿前自查、模拟审稿 | 合规报告 + ICML 审稿表格式的模拟审稿 | 无（只读，不改稿） |
-| `icml-rebuttal` | 收到审稿意见后 | 意见分类表、各轮回复、承诺清单 | 回应策略；是否指出审稿人失范；任何新实验结果 |
-| `icml-camera-ready` | 录用后 | 去匿名化终稿、lay summary、提交清单 | 利益冲突声明；作者与单位信息 |
+| `icml-write` | Drafting from repository, revising existing draft, migrating to ICML format | Claim ledger, paragraph outline, body text with `% TL;DR` annotations | ① Claims and abstract ② Outline, figure plan, page budget ③ True explanation of logical gaps |
+| `icml-cite` | Finding literature, generating BibTeX, checking references | Verified `.bib` and verification log | Whether to keep unverifiable citations |
+| `icml-review` | Pre-submission self-check, simulated review | Compliance report + ICML review-form-style simulated review | None (read-only, no editing) |
+| `icml-rebuttal` | After receiving reviews | Review classification table, per-round responses, promise checklist | Response strategy; whether to point out reviewer misconduct; any new experimental results |
+| `icml-camera-ready` | After acceptance | De-anonymized final draft, lay summary, submission checklist | Conflict-of-interest statement; author and affiliation information |
 
-## 共享状态：`.icml/` 工作区
+## Shared State: The `.icml/` Workspace
 
-五个 skill 互不引用对方的安装目录，而是通过论文项目里的 `.icml/` 目录共享状态
-（详见任一 skill 的 `references/workspace-contract.md`）：
+The five skills do not reference each other's installation directories; instead, they share state through the `.icml/` directory in the paper project
+(see any skill's `references/workspace-contract.md` for details):
 
-- `claims.md`：主张账本。论文中每个数字都必须能追溯到项目里的结果文件。
-- `outline.md`、`open_issues.md`（只有人能回答的问题）、`decisions.md`（人的决定与风格规则的例外理由）
-- `citations_log.md`、`reviews/`、`rebuttal/`（含 `promises.md`）、`camera_ready.md`、`state.md`
-- `venue_facts.md`：当年 ICML 规则。每个新周期必须刷新。
+- `claims.md`: Claim ledger. Every number in the paper must be traceable to a results file in the project.
+- `outline.md`, `open_issues.md` (questions only humans can answer), `decisions.md` (human decisions and justifications for style-rule exceptions)
+- `citations_log.md`, `reviews/`, `rebuttal/` (including `promises.md`), `camera_ready.md`, `state.md`
+- `venue_facts.md`: ICML rules for the target year. Must be refreshed for each new cycle.
 
-任何 skill 启动时都会运行 `scripts/init_workspace.py`，它只补缺、从不覆盖。
+Any skill runs `scripts/init_workspace.py` on startup, which only fills gaps and never overwrites.
 
-## 安装
+## Installation
 
-使用 [`skills` CLI](https://github.com/vercel-labs/skills)（需要 Node.js），**在论文仓库的根目录**按需安装：
+Use the [`skills` CLI](https://github.com/vercel-labs/skills) (requires Node.js), **in the root directory of your paper repository**, installing on demand:
 
 ```bash
-cd <你的论文仓库>
+cd <your-paper-repo>
 
-# 查看仓库里有哪些 skill
+# List available skills in this repo
 npx skills add a-green-hand-jack/icml-skills --list
 
-# 只装当前阶段需要的 skill，例如写稿阶段：
+# Install only the skills needed for the current stage, e.g., writing stage:
 npx skills add a-green-hand-jack/icml-skills --skill icml-write icml-cite icml-review -a claude-code
-# 收到审稿意见后再加：
+# Add after receiving reviews:
 npx skills add a-green-hand-jack/icml-skills --skill icml-rebuttal -a claude-code
 
-# 一次装全部五个
+# Install all five at once
 npx skills add a-green-hand-jack/icml-skills --skill '*' -a claude-code
 ```
 
-- **每个 skill 都可以单独安装。** 每个 skill 目录自带所需的 `references/` 和 `scripts/`，不依赖其他
-  skill 是否安装；它们之间只通过论文仓库里的 `.icml/` 共享状态。
-- `-a` 指定 agent：`claude-code` 装到 `.claude/skills/`，其他常用值有 `codex`、`cursor`、`opencode`、
-  `gemini-cli`；省略时 CLI 会自动检测或询问。
-- 安装会在仓库根目录生成 `skills-lock.json`，记录每个 skill 的来源与版本。建议把它和 skill 目录
-  一起提交，合作者 clone 后即可使用同一版本。
-- 更新：`npx skills update -p`；卸载：`npx skills remove icml-cite`。
-- 没有 Node.js 时，可以手动复制单个 skill：`cp -r icml-review <你的论文仓库>/.claude/skills/`。
+- **Each skill can be installed individually.** Each skill directory carries its own `references/` and `scripts/` and does not depend on whether other skills are installed; they interact only through the `.icml/` directory in the paper repository.
+- `-a` specifies the agent: `claude-code` installs to `.claude/skills/`; other common values are `codex`, `cursor`, `opencode`, `gemini-cli`; when omitted the CLI auto-detects or prompts.
+- Installation generates `skills-lock.json` in the repository root, recording the source and version of each skill. Committing it together with the skill directories lets collaborators use the same versions after cloning.
+- Update: `npx skills update -p`; uninstall: `npx skills remove icml-cite`.
+- Without Node.js, you can manually copy a single skill: `cp -r icml-review <your-paper-repo>/.claude/skills/`.
 
-**不建议加 `-g` 全局安装**，原因如下：
+**Global installation with `-g` is not recommended**, for the following reasons:
 
-- 这些 skill 的触发描述刻意写得很宽（例如“看一下我的论文”“清理我的 bib”“make my intro better”）。
-  全局安装后，它们会在与 ICML 无关的项目里抢触发。
-- `icml-venue-facts.md` 绑定某一年的 ICML 规则。项目级安装让每篇论文锁定自己投稿周期的版本，
-  更新一个仓库不会影响另一篇还在审稿或 rebuttal 中的论文。
+- These skills are intentionally given broad trigger descriptions (e.g., "look at my paper", "clean up my bib", "make my intro better"). When installed globally, they will fire on ICML-unrelated projects.
+- `icml-venue-facts.md` is bound to a specific year's ICML rules. Project-level installation lets each paper lock to its submission cycle's version, so updating one repository does not affect another paper still under review or in rebuttal.
 
-依赖：Python 3（脚本只用标准库）。建议安装 TeX Live（pdflatex、bibtex）和 poppler-utils
-（pdftotext、pdfinfo、pdffonts）；没有时相关检查会跳过并提示。`icml-cite` 需要访问
-dblp.org、api.semanticscholar.org、export.arxiv.org、doi.org；不能联网时会明确降级为占位符，
-绝不凭记忆补全引用。
+Dependencies: Python 3 (scripts use only the standard library). TeX Live (pdflatex, bibtex) and poppler-utils (pdftotext, pdfinfo, pdffonts) are recommended; without them, related checks are skipped with a notice. `icml-cite` requires access to dblp.org, api.semanticscholar.org, export.arxiv.org, and doi.org; when offline it explicitly downgrades to placeholders and never hallucinates citations from memory.
 
-不要与覆盖面很宽的通用论文 skill（如 davila7 的 `ml-paper-writing`）同时安装，避免抢触发。
+Do not install alongside very broad generic paper skills (e.g., davila7's `ml-paper-writing`), to avoid trigger contention.
 
-## 维护
+## Maintenance
 
-- **年份相关的规则只在 `_shared/references/icml-venue-facts.md` 修改**，然后运行
-  `bash sync_shared.sh` 分发到各 skill。`workspace-contract.md`、`init_workspace.py`、
-  `check_submission.py` 同理。
-- 修改脚本后运行 `bash tests/run_tests.sh`（41 项回归测试；夹具中的 `icml2026.sty`
-  是测试用桩文件，不是官方样式，切勿用于真实论文）。
-- `tests/eval-prompts.md` 列出了用于评估 skill 行为（而不只是脚本）的测试提示词。
+- **Year-specific rules are modified only in `_shared/references/icml-venue-facts.md`**, then run `bash sync_shared.sh` to distribute to all skills. `workspace-contract.md`, `init_workspace.py`, and `check_submission.py` are handled the same way.
+- After modifying scripts, run `bash tests/run_tests.sh` (41 regression tests; the `icml2026.sty` in fixtures is a test stub, not the official style—never use it for real papers).
+- `tests/eval-prompts.md` lists test prompts used to evaluate skill behavior (not just scripts).
 
-## 已知局限
+## Known Limitations
 
-- 合规检查是启发式的：页数判断依赖 PDF 文本中的结尾标题；匿名检查需要提供作者名与机构名。
-  最终仍需官方 paper checker 和人工通读。
-- `cite_lookup.py` 的线上 API 在构建环境中无法联网实测，只用模拟响应测试了解析逻辑；
-  首次使用时请确认几个查询能正常返回。
-- 写作参考材料以实证类论文为主；理论论文请补充课题组自己的规范。
-- Position track 只做了最基本的支持（Alternative Views 检查、无 Impact Statement）。
+- Compliance checks are heuristic: page count relies on the final section title in the PDF text; anonymity checks require supplying author names and institution names. Final verification still requires the official paper checker and human proofreading.
+- `cite_lookup.py` online APIs cannot be tested with real network access in the build environment; only mock responses are used to test parsing logic. Please verify that a few queries return correctly on first use.
+- Writing reference materials focus on empirical papers; theory papers should supplement with your group's own conventions.
+- Position track has only basic support (Alternative Views check, no Impact Statement).
 
-## 主要来源
+## Primary Sources
 
-ICML 2026 Author Instructions / Call for Papers / Reviewer Instructions / example paper / Lay Summaries 博文；
-Neel Nanda, *Highly Opinionated Advice on How to Write ML Papers* (2025)；
-Sebastian Farquhar, *How to Write ML Papers* (2024)；Jakob Foerster, *How to ML Paper - A brief Guide*；
-Gopen & Swan, *The Science of Scientific Writing* (1990)；Zachary Lipton, *Heuristics for Scientific Writing* (2018)；
-Ethan Perez, *Easy Paper Writing Tips*；Parikh, Batra & Lee, *How we write rebuttals* (2020)。
-各 skill 中的内容均为转述改写，示例为自编。
+ICML 2026 Author Instructions / Call for Papers / Reviewer Instructions / example paper / Lay Summaries blog post;
+Neel Nanda, *Highly Opinionated Advice on How to Write ML Papers* (2025);
+Sebastian Farquhar, *How to Write ML Papers* (2024); Jakob Foerster, *How to ML Paper - A brief Guide*;
+Gopen & Swan, *The Science of Scientific Writing* (1990); Zachary Lipton, *Heuristics for Scientific Writing* (2018);
+Ethan Perez, *Easy Paper Writing Tips*; Parikh, Batra & Lee, *How we write rebuttals* (2020).
+Content in each skill is paraphrased and adapted; examples are original.

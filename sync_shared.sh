@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
-# 将 _shared/ 中的单一可信源复制到每个 skill 文件夹。
-# 每个已安装的 skill 必须自包含，因此共享文件会被重复复制；
-# 只在 _shared/ 中编辑它们，然后重新运行此脚本。
+# Copy the single source of truth from _shared/ into each skill folder.
+# Each installed skill must be self-contained, so shared files are duplicated;
+# edit them only in _shared/, then rerun this script.
 set -euo pipefail
 cd "$(dirname "$0")"
 for s in icml-write icml-cite icml-review icml-rebuttal icml-camera-ready; do
@@ -13,4 +13,4 @@ done
 for s in icml-write icml-review icml-camera-ready; do
   cp _shared/scripts/check_submission.py "$s/scripts/"
 done
-echo "共享文件已同步"
+echo "Shared files synchronized"

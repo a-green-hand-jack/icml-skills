@@ -1,9 +1,9 @@
 #!/usr/bin/env python3
-"""在论文 LaTeX 根目录旁创建（或补全）.icml/ 工作区。
+"""Create (or complete) the `.icml/` workspace next to the paper LaTeX root.
 
-从不覆盖现有文件。在每个会话开始时安全运行。
+Never overwrites existing files. Safe to run at the start of every session.
 
-用法：
+Usage:
     python init_workspace.py --root path/to/latex/root [--skill icml-write]
 """
 import argparse
@@ -17,14 +17,14 @@ TODAY = datetime.date.today().isoformat()
 TEMPLATES = {
     "state.md": f"""# State
 - Phase: setup
-- Last action ({TODAY}, {{skill}}): 创建工作区
-- Next step: 刷新 venue_facts.md 以匹配目标年份，然后开始任务
+- Last action ({TODAY}, {{skill}}): created workspace
+- Next step: refresh venue_facts.md for the target year, then start the task
 - Blocking: none
 """,
     "claims.md": """# Claims Ledger
 
-格式参见工作区契约。Numbers 表格中的值必须与论文中出现的形式完全一致，
-且必须从项目文件中读取，绝不能凭记忆填写。
+Format see workspace contract. The value in the Numbers table must match exactly the form presented in the paper,
+and must be read from project files, not filled from memory.
 
 ## Claims
 
@@ -37,20 +37,20 @@ TEMPLATES = {
 ## Abstract draft
 
 ## Paragraph outline
-<!-- 一行 = 论文中的一个段落 -->
+<!-- one line = one paragraph in the paper -->
 
 ## Figure and table plan
 
 ## Page budget (8 pages main body)
 """,
-    "open_issues.md": "# Open Issues (need a human)\n\n",
+    "open_issues.md": "# Open Issues (human action required)\n\n",
     "decisions.md": "# Decisions Log\n\n",
     "citations_log.md": """# Citation Verification Log
 
 | key | status | sources checked | published version | notes |
 |-----|--------|-----------------|-------------------|-------|
 """,
-    "camera_ready.md": "# Camera-Ready Checklist Status\n\n(由 icml-camera-ready 在需要时创建)\n",
+    "camera_ready.md": "# Camera-Ready Checklist Status\n\n(created by icml-camera-ready when needed)\n",
 }
 
 DIRS = ["reviews", "rebuttal"]
@@ -58,13 +58,13 @@ DIRS = ["reviews", "rebuttal"]
 
 def main():
     ap = argparse.ArgumentParser(description=__doc__, formatter_class=argparse.RawDescriptionHelpFormatter)
-    ap.add_argument("--root", required=True, help="论文的 LaTeX 根目录")
-    ap.add_argument("--skill", default="unknown-skill", help="调用技能的名称（用于日志）")
+    ap.add_argument("--root", required=True, help="LaTeX root directory of the paper")
+    ap.add_argument("--skill", default="unknown-skill", help="Name of the calling skill (for logging)")
     args = ap.parse_args()
 
     root = Path(args.root).expanduser().resolve()
     if not root.is_dir():
-        print(f"ERROR: {root} 不是目录", file=sys.stderr)
+        print(f"ERROR: {root} is not a directory", file=sys.stderr)
         sys.exit(2)
     ws = root / ".icml"
     ws.mkdir(exist_ok=True)
@@ -84,9 +84,9 @@ def main():
         kept.append("venue_facts.md")
     elif facts_src.exists():
         shutil.copy(facts_src, facts_dst)
-        created.append("venue_facts.md (快照副本 - 请为目标年份刷新)")
+        created.append("venue_facts.md (snapshot copy — please refresh for target year)")
     else:
-        print("WARN: 本脚本旁未找到 icml-venue-facts.md；未创建 venue_facts.md")
+        print("WARN: icml-venue-facts.md not found next to script; venue_facts.md not created")
 
     for d in DIRS:
         (ws / d).mkdir(exist_ok=True)
@@ -97,9 +97,10 @@ def main():
     if kept:
         print("Already present (untouched): " + ", ".join(kept))
     gi = root / ".gitignore"
-    print("Note: .icml/ 存放工作笔记。在未经审查的情况下，它绝不能被包含在匿名补充 zip 或公开的 camera-ready 仓库中。")
+    print("Note: .icml/ holds working notes. Before including in anonymous supplementary zip or public camera-ready repo,\n"
+          "      it must be reviewed and should not be included directly.")
     if gi.exists() and ".icml" not in gi.read_text(encoding="utf-8", errors="ignore"):
-        print("Hint: 请考虑是否应将 .icml/ 列入公开仓库的 .gitignore。")
+        print("Hint: please consider whether .icml/ should be listed in the public repo's .gitignore.")
 
 
 if __name__ == "__main__":
