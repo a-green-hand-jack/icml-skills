@@ -1,116 +1,116 @@
-# ICML Venue Facts (snapshot: ICML 2026)
+# ICML 会讯事实（快照：ICML 2026）
 
-**Snapshot date:** 2026-10-05. **Applies to:** ICML 2026 (Seoul, July 6–11, 2026).
-Every number and policy here is year-specific. Before relying on it for a new cycle,
-refresh it (see "How to refresh" at the bottom). When this file and the live official
-pages disagree, the live pages win.
+**快照日期：** 2026-10-05。**适用对象：** ICML 2026（首尔，2026 年 7 月 6–11 日）。
+此处所有数字与政策均为年度特定。若要在新周期中沿用，
+请先刷新（见底部“如何刷新”）。当本文件与线上官方页面冲突时，
+以线上页面为准。
 
-Official sources this snapshot was built from:
-- Author Instructions: https://icml.cc/Conferences/2026/AuthorInstructions
-- Call for Papers: https://icml.cc/Conferences/2026/CallForPapers
-- Reviewer Instructions: https://icml.cc/Conferences/2026/ReviewerInstructions
-- Example paper (PDF): https://media.icml.cc/Conferences/ICML2026/Styles/example_paper.pdf
-- Style files: https://media.icml.cc/Conferences/ICML2026/Styles/icml2026.zip
+构建本快照所依据的官方来源：
+- 作者须知：https://icml.cc/Conferences/2026/AuthorInstructions
+- 征文启事：https://icml.cc/Conferences/2026/CallForPapers
+- 审稿人须知：https://icml.cc/Conferences/2026/ReviewerInstructions
+- 示例论文（PDF）：https://media.icml.cc/Conferences/ICML2026/Styles/example_paper.pdf
+- 样式文件：https://media.icml.cc/Conferences/ICML2026/Styles/icml2026.zip
 
 ---
 
-## 1. Format (submission)
+## 1. 格式（投稿）
 
-| Item | Requirement |
+| 项目 | 要求 |
 |---|---|
-| Main body | **8 pages max** — exceeding it means automatic rejection |
-| References, appendices, Impact Statement | Unlimited pages, same single PDF |
-| Typesetting | LaTeX only, official `icml2026.sty`, `\usepackage{icml2026}` (no `accepted` option) |
-| Layout | Two columns, US Letter (not A4), 10pt Times |
-| Style changes | Forbidden. Do not alter the template or compress vertical spacing |
-| Submission PDF size | 50 MB (Author Instructions page). The example paper still says 10 MB; follow the Author Instructions page and stay small anyway |
-| Abstract | One paragraph, ideally 4–6 sentences. Gross violations must be fixed at camera-ready |
-| Title and headings | Content words capitalized, never ALL CAPS. At most three heading levels |
-| Figures | Caption **below**; no title inside the graphic; label axes; legend for each curve; vector (PDF/EPS) for plots |
-| Tables | Caption **above** |
-| Pseudocode | `algorithm` + `algorithmic` environments (supplied with the style files) |
-| Citations | APA author–year via `natbib` + `icml2026.bst`. Multiple citations in chronological order. Protect capitals in BibTeX titles: `{B}ayesian`, `{L}ipschitz` |
-| Fonts | Example paper asks for Type-1 fonts; 2026 camera-ready notes there is no Type 3 check. Use pdflatex and vector figures; treat Type 3 as a warning |
+| 正文 | **最多 8 页** — 超过即自动拒稿 |
+| 参考文献、附录、影响声明 | 页数不限，合并为单个 PDF |
+| 排版 | 仅限 LaTeX，官方 `icml2026.sty`，`\usepackage{icml2026}`（不使用 `accepted` 选项） |
+| 版式 | 双栏，US Letter（非 A4），10pt Times |
+| 样式修改 | 禁止。不得改动模板或压缩垂直间距 |
+| 投稿 PDF 大小 | 50 MB（作者须知页面）。示例论文仍写 10 MB；遵循作者须知页面并尽量保持小巧 |
+| 摘要 | 一段，理想 4–6 句。严重违规必须在最终稿阶段修正 |
+| 标题与标题层级 | 实义词首字母大写，禁止全大写。最多三级标题 |
+| 图 | 图注在**下方**；图形内部不得有标题；标注坐标轴；每条曲线需图例；绘图使用矢量格式（PDF/EPS） |
+| 表 | 表题在**上方** |
+| 伪代码 | `algorithm` + `algorithmic` 环境（随样式文件提供） |
+| 引用 | 使用 `natbib` + `icml2026.bst` 的 APA 作者–年份格式。多篇引用按时间顺序排列。在 BibTeX 标题中保护大写：`{B}ayesian`、`{L}ipschitz` |
+| 字体 | 示例论文要求 Type-1 字体；2026 最终稿说明不再检查 Type 3。使用 pdflatex 与矢量图；将 Type 3 视为警告 |
 
-## 2. Anonymity (double-blind)
+## 2. 匿名性（双盲）
 
-- No author names or affiliations visible (the style hides `\icmlauthor` unless `accepted`).
-- No acknowledgements, grant numbers, or links to public (non-anonymous) code repositories.
-- Refer to your own prior work in the third person. Never write "in our previous work (X, 2024) we showed".
-- Do NOT anonymize entries in the reference list, except unpublished own work (e.g., under review elsewhere), which is cited as an anonymous reference and uploaded as anonymized Supplementary Material.
-- Prior own papers with substantial overlap must be cited (anonymously) and the differences explained.
-- arXiv preprints are allowed, but the submission must not refer to the non-anonymous version, and the work must not be advertised as an ICML submission during review.
-- Rebuttal text must also be anonymous (see §6).
+- 不显示作者姓名或单位（样式在 `accepted` 选项外会隐藏 `\icmlauthor`）。
+- 不得出现致谢、资助编号或指向公开（非匿名）代码仓库的链接。
+- 引用自己之前的工作时使用第三人称。禁止写“在我们之前的工作（X, 2024）中，我们证明了……”。
+- 参考文献列表中的条目**不要**匿名化，除尚未发表的本组工作（例如正在其他会议审稿中）外，后者作为匿名引用并在匿名化补充材料中上传。
+- 与自己先前论文有实质性重叠的，必须（匿名）引用并解释差异。
+- 允许 arXiv 预印本，但投稿不得引用非匿名版本，且不得在审稿期间将该工作宣传为 ICML 投稿。
+- 反驳文本也必须匿名（见 §6）。
 
-## 3. Required and optional sections
+## 3. 必需与可选章节
 
-- **Impact Statement (required, main track):** unnumbered section at the end of the paper, co-located with Acknowledgements, before References; does not count toward the page limit. When impacts are the standard ones for advancing ML, this sentence may be used verbatim:
-  > "This paper presents work whose goal is to advance the field of Machine Learning. There are many potential societal consequences of our work, none which we feel must be specifically highlighted here."
+- **影响声明（主赛道必需）：** 放在论文末尾的无编号章节，与致谢并列、在参考文献之前；不计入页数限制。若影响仅为推动机器学习领域的常规进展，可逐字使用以下句子：
+  > "本文介绍的研究旨在推动机器学习领域的发展。我们的工作可能带来多种潜在的社会影响，我们认为没有必要在此特别指出任何一项。"
 
-  Authors are encouraged to say more when warranted; the statement is read if the paper is flagged for ethics review.
-- **Acknowledgements:** camera-ready only.
-- **Limitations:** not a mandated section at ICML, but reviewers are told to reward, not punish, honest discussion of limitations. Include one.
-- **Position paper track (separate track):** title must state the position; abstract states it ("This position paper argues that ..."); position in bold in the introduction; a mandatory **Alternative Views** section in the main body; no Impact Statement required.
+  作者被鼓励在适当时进行更详细的阐述；若论文被标记为伦理审查，该声明将被阅读。
+- **致谢：** 仅最终稿阶段允许。
+- **局限性：** ICML 未强制要求该章节，但审稿人被要求对诚实的局限性讨论予以奖励而非惩罚。建议加入。
+- **立场论文赛道（独立赛道）：** 标题必须表明立场；摘要中声明立场（"本立场论文主张……"）；引言中以粗体标出立场；正文中必须包含 **Alternative Views** 章节；无需影响声明。
 
-## 4. Supplementary material
+## 4. 补充材料
 
-- Text appendices go in the main PDF (unlimited). Reviewers are not required to read appendices or supplementary material: anything critical must be in the 8 pages.
-- Code/data: zip or PDF upload, anonymized (remove names and licenses), or an anonymous GitHub repo on a branch frozen after the deadline (link in a text file inside the zip).
-- Code submission is encouraged; reproducibility is considered in decisions.
-- No camera-ready supplementary material of any kind.
+- 文字附录放在主 PDF 中（页数不限）。审稿人**不强制**阅读附录或补充材料：任何关键内容必须包含在 8 页正文内。
+- 代码/数据：以 zip 或 PDF 上传，需匿名化（移除姓名与许可证），或提供在截稿后冻结的匿名 GitHub 仓库分支（在 zip 内的文本文件中放置链接）。
+- 鼓励提交代码；可复现性会被纳入决策考量。
+- 最终稿不接受任何形式的补充材料。
 
-## 5. Policies relevant to AI-assisted writing
+## 5. 与 AI 辅助写作相关的政策
 
-- LLMs may assist writing and research; **authors take full responsibility** for all content, including anything that could be construed as plagiarism or misconduct. Authors are encouraged to describe notable ways LLMs were used in the research methodology.
-- LLMs cannot be authors.
-- **Prompt injection is forbidden and leads to desk rejection** (text crafted to manipulate LLM reviewers). Organizers run detectors. A Feb 2026 update said prompts merely designed to *detect* reviewer LLM use are not penalized — this skill family still never inserts any hidden or reviewer-directed text.
-- Reviewers are told that submitting low-quality AI-generated content ("AI slop") may be misconduct and can be reported.
-- Plagiarism in any form is forbidden. Never copy sentences from other papers.
-- Dual submission of substantially similar work is forbidden; concurrent ICML submissions with overlapping authors are treated as prior work for each other.
+- LLM 可协助写作与研究；**作者对所有内容负全责**，包括任何可能被认定为抄袭或不当行为的内容。鼓励作者在研究方法中描述使用 LLM 的显著方式。
+- LLM 不能列为作者。
+- **提示注入被禁止，一经发现直接拒稿**（旨在操纵 LLM 审稿人的文本）。组织者会运行检测器。2026 年 2 月的更新说明，仅用于*检测*审稿人是否使用 LLM 的提示不会被处罚 —— 本技能族仍绝不插入任何隐藏或面向审稿人的文本。
+- 审稿人被告知，提交低质量 AI 生成内容（"AI slop"）可能构成不当行为，可被举报。
+- 禁止任何形式的抄袭。不得从其他论文复制句子。
+- 禁止实质性相似工作的双重投稿；同一作者并行的 ICML 投稿彼此视为先前工作。
 
-## 6. Review process and author response (2026)
+## 6. 审稿流程与作者回应（2026）
 
-- Review form dimensions, each scored 1–4: **Soundness, Presentation, Significance, Originality**. Overall recommendation 1–6 (6 Strong Accept, 5 Accept, 4 Weak accept, 3 Weak reject, 2 Reject, 1 Strong Reject). Confidence 1–5.
-- Reviewers are told: originality does not require a new method (new insight about existing methods counts); soundness is assessed separately from impact; honest limitations should be rewarded.
-- Reviewers give 3–5 numbered "key questions" whose answers could change their evaluation.
-- Concurrent work: works made public less than two months before the full-paper deadline are concurrent; authors are not required to discuss them.
-- **Author response:** three rounds of author–reviewer discussion (author rebuttal, reviewer follow-up, author follow-up), **each limited to 5000 characters**. Verify on OpenReview whether the limit applies per reply/thread.
-- **No revised PDF** can be uploaded during the response period.
-- Responses must be anonymous: no non-anonymized URLs, no personal-website URLs, no shortened URLs (they can log reviewer IPs). Reviewers are not expected to follow external links.
-- No need to answer every minor point. Organize by reviewer ID. Be professional and polite.
-- Reviewers must acknowledge the response and write a post-rebuttal "Final Justification" stating whether the rebuttal addressed their concerns.
-- **Publicity:** for accepted papers, the original submission, anonymized reviews, meta-reviews, rebuttal and discussion are published on OpenReview. Rejected papers may opt in. Write every response as if it will be public.
+- 评审表单维度，每项 1–4 分：**Soundness、Presentation、Significance、Originality**。总体推荐 1–6 分（6 强烈接收、5 接收、4 弱接收、3 弱拒稿、2 拒稿、1 强烈拒稿）。置信度 1–5 分。
+- 审稿人须知：原创性不要求提出新方法（对现有方法的新见解也算）；soundness 与影响分开评估；应奖励诚实的局限性讨论。
+- 审稿人给出 3–5 条编号“关键问题”，其答案可能改变评审意见。
+- 同期工作：在全文截稿前两个月内公开的工作视为同期；作者无需讨论。
+- **作者回应：** 三轮作者–审稿人讨论（作者反驳、审稿人跟进、作者再跟进），**每轮限制 5000 字符**。请在 OpenReview 上确认该限制是按回复/线程计算还是总计。
+- 回应期间**不得上传**修改后的 PDF。
+- 回应必须匿名：不得出现非匿名 URL、个人网站 URL、短链接（它们可能记录审稿人 IP）。审稿人不需访问外部链接。
+- 无需回应所有琐碎问题。按审稿人编号组织。保持专业与礼貌。
+- 审稿人必须确认回应并撰写反驳后“最终理由”，说明反驳是否解决了其顾虑。
+- **公开性：** 接收论文的原始投稿、匿名评审、元评审、反驳与讨论将在 OpenReview 上公开。拒稿论文可选择公开。撰写每条回应时，请假设它将被公开。
 
-## 7. Camera-ready (2026)
+## 7. 最终稿（2026）
 
-- Deadline (2026): May 28, 11:59pm AoE. In-person presentation questionnaire due May 11.
-- `\usepackage[accepted]{icml2026}`; main body **9 pages**, followed by Acknowledgements, Impact Statement, References, Appendices. PDF ≤ 20 MB. US Letter.
-- Author block per `example_paper.tex`; call `\printAffiliationsAndNotice{\icmlEqualContribution}` or `\printAffiliationsAndNotice{}`. Affiliations must match OpenReview profiles.
-- Author order may change; **no additions or removals**. Must match OpenReview.
-- Title and abstract may change only slightly (significant title changes need PC permission). Title and abstract entered in the OpenReview form must match the PDF exactly; TeX math allowed sparingly, no custom macros, accents via TeX commands.
-- Essential content must remain unchanged relative to the reviewed version (the original submission is published alongside).
-- **Conflict of Interest Disclosure (new in 2026):** if any financial/substantive conflict exists (e.g., evaluating a model built by an author's employer), add a paragraph titled "Conflict of Interest Disclosure" as the **last paragraph of the introduction**. Omit it entirely if there is no conflict. Mere industry employment is not a conflict.
-- References: correct bibliographic data; replace arXiv citations with peer-reviewed versions where possible; fix items listed under "Reference Correctness Check" in the OpenReview decision; protect capitalization in BibTeX.
-- Code/data: put in a public archival repository and link it in the paper; optionally fill the OpenReview "code url" box.
-- **Lay summary** (plain-language summary) entered in OpenReview. 2026 guidance (same as 2025): at most 10 sentences / 200 words; understandable by a science journalist; specific enough that it could not describe any other ICML paper; think of it as a trailer for the paper. Source: https://blog.icml.cc/2026/05/07/icml-2026-lay-summaries/
-- Run the ICML format checker (https://papercheck.icml.cc/papercheck.html) until clean; enter the 5-letter code it returns in the camera-ready form.
-- Forms: PMLR Publication Agreement (uploaded, ≤10 MB), ICML Publishing Release (signed by one author), Recording Release for oral presenters.
-- Registration: at least one author must register (Conference option for in-person; Conference or Virtual Pass for proceedings-only).
-- Accessibility: color-blind-safe figures, up-to-date bibliography names and venues, inclusive language.
-- A post-conference revision window allows small corrections before PMLR publication.
+- 截稿（2026）：5 月 28 日，AoE 时间 23:59。现场展示问卷截止 5 月 11 日。
+- `\usepackage[accepted]{icml2026}`；正文 **9 页**，随后是致谢、影响声明、参考文献、附录。PDF ≤ 20 MB。US Letter。
+- 作者块按 `example_paper.tex`；调用 `\printAffiliationsAndNotice{\icmlEqualContribution}` 或 `\printAffiliationsAndNotice{}`。单位必须与 OpenReview 个人资料一致。
+- 作者顺序可以调整；**不得增删作者**。必须与 OpenReview 一致。
+- 标题与摘要仅可小幅修改（显著标题变更需 PC 许可）。OpenReview 表单中输入的标题与摘要必须与 PDF 完全一致；可少量使用 TeX 数学，禁止自定义宏，重音符号通过 TeX 命令输入。
+- 核心内容相对于审稿版本必须保持不变（原始投稿将一并发布）。
+- **利益冲突披露（2026 年新增）：** 若存在任何财务/实质性利益冲突（例如，评估作者雇主构建的模型），请在引言**最后一段**添加以 "Conflict of Interest Disclosure" 为标题的段落。若无冲突则完全省略。单纯的行业就业不构成冲突。
+- 参考文献：修正书目数据；尽可能将 arXiv 引用替换为同行评审版本；修复 OpenReview 决定中列在 “Reference Correctness Check” 下的条目；在 BibTeX 中保护大写。
+- 代码/数据：放入公共存档仓库并在论文中链接；可选择填写 OpenReview 的 “code url” 栏。
+- ** lay summary**（通俗摘要）在 OpenReview 中填写。2026 年指导（与 2025 年相同）：最多 10 句 / 200 词；科学记者可理解；具体程度需达到无法用于描述其他任何 ICML 论文；可将其视为论文预告片。来源：https://blog.icml.cc/2026/05/07/icml-2026-lay-summaries/
+- 运行 ICML 格式检查器（https://papercheck.icml.cc/papercheck.html）直至无报错；在最终稿表单中输入其返回的 5 位代码。
+- 表单：PMLR 出版协议（上传，≤10 MB）、ICML 出版授权（一名作者签署）、口头报告录像授权。
+- 注册：至少一名作者必须注册（现场参会选择 Conference 选项；仅出版选择 Conference 或 Virtual Pass）。
+- 无障碍：色觉友好图表、最新的参考文献姓名与会议名称、包容性语言。
+- 会后修订窗口允许在 PMLR 出版前进行小幅修正。
 
-## 8. Key 2026 dates (historical, for orientation)
+## 8. 2026 年关键日期（历史参考）
 
-Abstract deadline Jan 23, 2026 AoE; full paper Jan 28, 2026 AoE; reviews due Mar 12; author–reviewer discussion Mar 24 – Apr 7; notification Apr 30; camera-ready May 28. Deadlines are strict, no extensions. The author list cannot change after the abstract deadline.
+摘要截稿 2026 年 1 月 23 日 AoE；全文 1 月 28 日 AoE；审稿截止 3 月 12 日；作者–审稿人讨论 3 月 24 日 – 4 月 7 日；通知 4 月 30 日；最终稿 5 月 28 日。截稿严格，不设延期。摘要截稿后作者名单不可变更。
 
 ---
 
-## How to refresh this file for a new cycle
+## 如何为新的周期刷新本文件
 
-1. If you have network access, fetch the current year's Author Instructions, Call for Papers, Reviewer Instructions and example paper (replace `2026` in the URLs above with the target year; if a page 404s, start from https://icml.cc and navigate).
-2. Diff every row above against them. Update values, note the new snapshot date and year at the top, and list what changed under "Changelog".
-3. Write the refreshed copy to the project workspace as `.icml/venue_facts.md` (the workspace copy is what the skills read during a project).
-4. If you cannot fetch, tell the user explicitly: "Using ICML 2026 rules (snapshot 2026-10-05); please confirm they still hold for your target year." Do not silently assume.
+1. 若有网络，请获取当年的作者须知、征文启事、审稿人须知与示例论文（将上方 URL 中的 `2026` 替换为目标年份；若页面 404，请从 https://icml.cc 开始导航）。
+2. 将上表每一项与官方页面做 diff。更新数值，在顶部注明新的快照日期与年份，并在“变更记录”下列出修改内容。
+3. 将刷新后的副本写入项目工作区，路径为 `.icml/venue_facts.md`（技能在项目期间读取的是工作区副本）。
+4. 若无法获取，请明确告知用户：“正在使用 ICML 2026 规则（快照 2026-10-05）；请确认它们仍适用于您的目标年份。”切勿静默假设。
 
-## Changelog
-- 2026-10-05: initial snapshot from ICML 2026 official pages.
+## 变更记录
+- 2026-10-05：从 ICML 2026 官方页面创建初始快照。

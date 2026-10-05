@@ -1,9 +1,9 @@
 #!/usr/bin/env python3
-"""Create (or complete) the .icml/ workspace next to the paper's LaTeX root.
+"""在论文 LaTeX 根目录旁边创建（或补全）`.icml/` 工作区。
 
-Never overwrites existing files. Safe to run at the start of every session.
+永远不会覆盖现有文件。每次会话开始时安全运行。
 
-Usage:
+用法：
     python init_workspace.py --root path/to/latex/root [--skill icml-write]
 """
 import argparse
@@ -58,13 +58,13 @@ DIRS = ["reviews", "rebuttal"]
 
 def main():
     ap = argparse.ArgumentParser(description=__doc__, formatter_class=argparse.RawDescriptionHelpFormatter)
-    ap.add_argument("--root", required=True, help="LaTeX root directory of the paper")
-    ap.add_argument("--skill", default="unknown-skill", help="name of the calling skill (for the log)")
+    ap.add_argument("--root", required=True, help="论文的 LaTeX 根目录")
+    ap.add_argument("--skill", default="unknown-skill", help="调用 skill 的名称（用于日志）")
     args = ap.parse_args()
 
     root = Path(args.root).expanduser().resolve()
     if not root.is_dir():
-        print(f"ERROR: {root} is not a directory", file=sys.stderr)
+        print(f"ERROR: {root} 不是目录", file=sys.stderr)
         sys.exit(2)
     ws = root / ".icml"
     ws.mkdir(exist_ok=True)
@@ -86,7 +86,7 @@ def main():
         shutil.copy(facts_src, facts_dst)
         created.append("venue_facts.md (snapshot copy - refresh it for the target year)")
     else:
-        print("WARN: icml-venue-facts.md not found next to this script; venue_facts.md not created")
+        print("WARN: icml-venue-facts.md 未在脚本旁边找到；未创建 venue_facts.md")
 
     for d in DIRS:
         (ws / d).mkdir(exist_ok=True)

@@ -1,7 +1,7 @@
-Thank you for the review. We are sorry. Sorry again, and apologies.
+感谢您提供的审稿意见。我们深感抱歉。再次致歉，并深表歉意。
 
-**Q1: Is the baseline tuned?** Yes. We tuned both with 20 trials; ours reaches 92.1% and the baseline 90.3%, and the new run gives 88.7%.
+**Q1: 基线是否经过调优？** 是的。我们对两者都进行了 20 次试验调优；我们的方法达到 92.1%，基线为 90.3%，而新的一次运行结果为 88.7%。
 
-**Q2: Missing comparison to MoE-X.** We will clarify this in the paper. The reviewer is wrong about the setting. Code at https://bit.ly/abc and https://github.com/janedoe/router. Jane Doe's lab ran this.
+**Q2: 缺少与 MoE-X 的比较。** 我们将在论文中澄清这一点。审稿人对实验设置的理解有误。代码见 https://bit.ly/abc 和 https://github.com/janedoe/router。Jane Doe 的实验室运行过该方法。
 
-Please raise your score. TODO
+请提高您的评分。TODO

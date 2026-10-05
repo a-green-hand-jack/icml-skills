@@ -1,9 +1,9 @@
 #!/usr/bin/env python3
-"""Create (or complete) the .icml/ workspace next to the paper's LaTeX root.
+"""在论文 LaTeX 根目录旁创建（或补全）`.icml/` 工作区。
 
-Never overwrites existing files. Safe to run at the start of every session.
+从不覆盖现有文件。每次会话开始时安全运行。
 
-Usage:
+用法：
     python init_workspace.py --root path/to/latex/root [--skill icml-write]
 """
 import argparse
@@ -23,8 +23,8 @@ TEMPLATES = {
 """,
     "claims.md": """# Claims Ledger
 
-See the workspace contract for the format. Values in the Numbers table must be written
-exactly as they appear in the paper and must be read from a project file, never recalled.
+格式见工作区合约。Numbers 表中的值必须与论文中出现的完全一致，
+且必须从项目文件中读取，不得凭记忆填写。
 
 ## Claims
 
@@ -37,7 +37,7 @@ exactly as they appear in the paper and must be read from a project file, never 
 ## Abstract draft
 
 ## Paragraph outline
-<!-- one line = one paragraph in the paper -->
+<!-- 一行 = 论文中的一个段落 -->
 
 ## Figure and table plan
 
@@ -50,7 +50,7 @@ exactly as they appear in the paper and must be read from a project file, never 
 | key | status | sources checked | published version | notes |
 |-----|--------|-----------------|-------------------|-------|
 """,
-    "camera_ready.md": "# Camera-Ready Checklist Status\n\n(created by icml-camera-ready when needed)\n",
+    "camera_ready.md": "# Camera-Ready Checklist Status\n\n(由 icml-camera-ready 在需要时创建)\n",
 }
 
 DIRS = ["reviews", "rebuttal"]
@@ -58,13 +58,13 @@ DIRS = ["reviews", "rebuttal"]
 
 def main():
     ap = argparse.ArgumentParser(description=__doc__, formatter_class=argparse.RawDescriptionHelpFormatter)
-    ap.add_argument("--root", required=True, help="LaTeX root directory of the paper")
-    ap.add_argument("--skill", default="unknown-skill", help="name of the calling skill (for the log)")
+    ap.add_argument("--root", required=True, help="论文的 LaTeX 根目录")
+    ap.add_argument("--skill", default="unknown-skill", help="调用技能的名称（用于日志）")
     args = ap.parse_args()
 
     root = Path(args.root).expanduser().resolve()
     if not root.is_dir():
-        print(f"ERROR: {root} is not a directory", file=sys.stderr)
+        print(f"ERROR: {root} 不是目录", file=sys.stderr)
         sys.exit(2)
     ws = root / ".icml"
     ws.mkdir(exist_ok=True)
@@ -86,7 +86,7 @@ def main():
         shutil.copy(facts_src, facts_dst)
         created.append("venue_facts.md (snapshot copy - refresh it for the target year)")
     else:
-        print("WARN: icml-venue-facts.md not found next to this script; venue_facts.md not created")
+        print("WARN: icml-venue-facts.md 未在此脚本旁找到；未创建 venue_facts.md")
 
     for d in DIRS:
         (ws / d).mkdir(exist_ok=True)
@@ -97,10 +97,9 @@ def main():
     if kept:
         print("Already present (untouched): " + ", ".join(kept))
     gi = root / ".gitignore"
-    print("Note: .icml/ holds working notes. It must never be included in an anonymous "
-          "supplementary zip or a public camera-ready repo without review.")
+    print("Note: .icml/ 存放工作笔记。在未审查之前，绝不能将其包含在匿名补充材料 zip 或公共定稿仓库中。")
     if gi.exists() and ".icml" not in gi.read_text(encoding="utf-8", errors="ignore"):
-        print("Hint: consider whether .icml/ should be listed in .gitignore for public repos.")
+        print("Hint: 考虑是否应在公共仓库的 .gitignore 中列出 .icml/。")
 
 
 if __name__ == "__main__":

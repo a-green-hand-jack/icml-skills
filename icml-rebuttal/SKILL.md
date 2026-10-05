@@ -1,133 +1,76 @@
 ---
 name: icml-rebuttal
-description: Plan and write ICML author responses (rebuttals) to real reviews on OpenReview. Itemizes every reviewer comment, separates misunderstandings from real weaknesses, plans any additional experiments, drafts per-reviewer replies and a summary for the area chair within ICML's limits (three discussion rounds, 5000 characters each, no links that break anonymity, no revised PDF), and tracks every promised change for the camera-ready. Use this skill whenever the user has received ICML reviews or meta-reviews, pastes reviewer comments, asks how to respond to reviewers, wants a rebuttal or follow-up reply drafted or shortened, or is deciding which reviewer concerns to concede or contest - even if they only say "the reviews are out" or "help me answer R2". Not for simulated pre-submission reviews (icml-review).
-compatibility: Python 3 for the length/anonymity checker. Running new experiments needs the user's compute; this skill never invents their results.
+description: 针对 OpenReview 上的真实审稿意见，规划和撰写 ICML 作者回复（rebuttal）。逐条列出每位审稿人的评论，区分误解与真正的缺陷，规划可能需要补充的实验，起草逐审稿人回复以及面向领域主席（AC）的总结，严格遵守 ICML 的限制（三轮讨论，每轮 5000 字符，不得包含破坏匿名性的链接，不得上传修改后的 PDF），并追踪每一项承诺的修改以确保最终版本落实。当用户收到 ICML 审稿意见或元审稿意见、粘贴审稿人评论、询问如何回复审稿人、希望起草或精简 rebuttal 或跟进回复、或正在决定哪些审稿人关切应该让步或争辩时——即使他们只说"审稿意见出来了"或"帮我回复 R2"——也使用本技能。不用于模拟投稿前审稿（icml-review）。
+compatibility: Python 3，用于长度/匿名性检查。运行新实验需要用户自己的算力；本技能从不捏造实验结果。
 ---
 
-# ICML Rebuttal
+# ICML Rebuttal（ICML 作者回复）
 
-The rebuttal has two audiences. Reviewers read your paper to varying depth and may have
-forgotten or misread details. The area chair (AC) knows the paper even less and may read
-only the reviews and your responses. The goal is to clarify and convince both - and,
-above all, to make it easy for the AC to decide (Parikh, Batra & Lee). A useful test: a
-neutral third party should be able to tell whether each concern was addressed from the
-rebuttal alone, without opening the paper or the reviews.
+Rebuttal 有两个受众。审稿人对论文的阅读深度不一，可能已经遗忘或误读了细节。领域主席（AC）对论文的了解更少，可能只读审稿意见和你的回复。目标是向两者澄清并说服——最重要的是，让 AC 容易做出决定（Parikh, Batra & Lee）。一个有用的检验标准：一位中立的第三方应该仅通过 rebuttal 就能判断每个关切是否得到了回应，而无需打开论文或审稿意见。
 
-At ICML (2026 rules; check `.icml/venue_facts.md`): three discussion rounds (author
-response, reviewer follow-up, author follow-up), each limited to 5000 characters; no
-revised PDF during the response period; no non-anonymous, personal or shortened URLs
-(reviewers are not expected to follow links anyway); no need to answer every minor
-point; organize by reviewer ID; be professional. For accepted papers, the reviews and
-the whole discussion become public, and reviewers write a post-rebuttal justification
-saying whether you addressed their concerns.
+在 ICML（2026 年规则；请检查 `.icml/venue_facts.md`）：三轮讨论（作者回复、审稿人跟进、作者跟进），每轮限制 5000 字符；回复期间不得上传修改后的 PDF；不得包含非匿名、个人化或缩短的 URL（审稿人本来就不被要求点击链接）；无需回答每个细枝末节；按审稿人 ID 组织；保持专业。对于被接收的论文，审稿意见和全部讨论将公开，审稿人会撰写 post-rebuttal 说明，陈述你是否回应了他们的关切。
 
-Talk to the user in their language; write the responses in English.
+用用户的语言与用户交流；回复用英文撰写。
 
-## Ground rules
+## 基本规则
 
-1. **No invented results.** You may design experiments and write the code to run them.
-   You may not write a number into a response until the run has finished and the number
-   is in a file. Unrun experiments are described as such, honestly.
-2. **The human decides strategy.** What to concede, what to contest, whether to run a
-   requested experiment, and whether to tell the AC that a review is unfair are the
-   authors' calls. Prepare options; do not decide.
-3. **Never accuse reviewers of bad faith on your own initiative.** If the authors want to
-   flag a review that ignores the paper or is unsubstantiated, help them phrase it
-   factually and politely, preferably in a confidential comment to the AC if the
-   platform allows it.
-4. **Anonymity holds.** No names, affiliations, identifying links, or "our previous
-   paper X". Anonymous repos only, and only if useful (reviewers need not open them).
-5. **Nothing hidden or reviewer-model-directed** in responses either.
-6. **Don't promise - do.** Since no revised PDF can be uploaded, put the actual new text,
-   numbers or proof sketch into the response, and record that it will be added to the
-   paper. Every promise goes into `.icml/rebuttal/promises.md`.
+1. **不得捏造结果。** 你可以设计实验并编写运行代码。但在实验运行完成且数值已写入文件之前，不得将数字写入回复。未运行的实验应如实描述为尚未运行。
+2. **由人类决定策略。** 哪些内容让步、哪些争辩、是否运行审稿人要求的实验、以及是否向 AC 反映某条审稿意见不公正，这些都是作者的决定。准备好选项；不要替作者决定。
+3. **绝不主动指责审稿人恶意。** 如果作者希望标记某条无视论文或缺乏依据的审稿意见，帮助他们用事实性和礼貌的方式表达，如果平台允许，最好通过面向 AC 的保密评论提出。
+4. **保持匿名。** 不得出现姓名、单位、可识别身份的链接或"我们先前的工作 X"。仅限匿名仓库，且仅在有用时提供（审稿人无需打开它们）。
+5. **回复中也不得包含任何隐藏内容或面向审稿人模型的引导性文字。**
+6. **不要承诺——要落实。** 由于无法上传修改后的 PDF，应将实际的新文本、数字或证明概要直接放入回复中，并记录这些内容将被加入论文。每一项承诺都写入 `.icml/rebuttal/promises.md`。
 
-## Step 0 — Setup
+## Step 0 — 准备工作
 
-Run `python scripts/init_workspace.py --root <latex-root> --skill icml-rebuttal`. Save
-each review as `.icml/reviews/R-<reviewerID>.md` (scores included) and the
-meta-review/AC messages if any. Read `.icml/claims.md`, `state.md`, any earlier
-simulated review (it often predicted the questions), and the paper. If no workspace
-existed, note in `state.md` that the ledger is missing and verify numbers directly from
-the paper and the results files.
+运行 `python scripts/init_workspace.py --root <latex-root> --skill icml-rebuttal`。将每条审稿意见保存为 `.icml/reviews/R-<reviewerID>.md`（包含分数），如有元审稿/AC 消息也一并保存。阅读 `.icml/claims.md`、`state.md`、任何早期的模拟审稿意见（它往往预测了问题），以及论文本身。如果工作区不存在，在 `state.md` 中注明 ledger 缺失，并直接从论文和结果文件中核实数字。
 
-## Step 1 — Itemize (triage table)
+## Step 1 — 逐条梳理（分类表）
 
-Build `.icml/rebuttal/triage.md` with one row per distinct comment (follow
-`references/rebuttal-playbook.md` §2): ID (R1.3), quote of the core of the comment, type
-(misunderstanding / already in paper / missing experiment / missing baseline /
-clarity / claim too strong / related work / factual error by reviewer / minor / out of
-scope), severity for the decision, which reviewers share it, possible responses, evidence
-available (paper location, ledger number, new experiment needed), and owner.
+构建 `.icml/rebuttal/triage.md`，每行对应一条独立评论（遵循 `references/rebuttal-playbook.md` §2）：ID（R1.3）、评论核心原文引用、类型（误解 / 已在论文中 / 缺少实验 / 缺少基线 / 清晰度 / 论断过强 / 相关工作 / 审稿人事实错误 / 次要 / 超出范围）、对决定的影响严重程度、哪些审稿人共享该关切、可能的回应、可用证据（论文位置、ledger 编号、是否需要新实验）、负责人。
 
-Then summarize for the user: scores and confidence per reviewer; the 2–4 concerns that
-actually drive the decision; shared concerns; quick wins; where the paper really is
-weak. Be candid - a rebuttal cannot fix everything, and pretending otherwise wastes the
-window.
+然后向用户总结：每位审稿人的分数和置信度；真正影响决定的 2–4 个关切；共享的关切；容易解决的问题；论文真正薄弱之处。要坦诚——rebuttal 不能解决所有问题，假装 otherwise 会浪费宝贵的时间窗口。
 
-## Step 2 — Decide (human checkpoint)
+## Step 2 — 决策（人工检查点）
 
-Present a strategy proposal and wait for the authors:
-- for each major concern: concede-and-fix, clarify, contest-with-evidence, or
-  acknowledge-as-limitation, with your recommendation;
-- additional experiments worth running in the window, with estimated cost, and what
-  result would be persuasive (be explicit that results may not favour the paper);
-- what to deprioritise.
+提出策略建议并等待作者确认：
+- 对每个主要关切：让步并修正、澄清、用证据反驳，或承认为局限性，附上你的建议；
+- 在时间窗口内值得运行的额外实验，估计成本，以及什么样的结果具有说服力（明确说明结果可能不利于论文）；
+- 哪些内容可以降级处理。
 
-Record decisions in `decisions.md`.
+将决策记录到 `decisions.md`。
 
-## Step 3 — Experiments (if any)
+## Step 3 — 实验（如有）
 
-Write and run (or hand the user) the code; log results to files; add them to the claims
-ledger (as new numbers, `verified: yes` only when read from output). Report negative or
-mixed results honestly and discuss with the authors how to present them. Reviewers and
-ACs reward transparency; a hidden negative result that surfaces later is far worse.
+编写并运行（或交给用户运行）代码；将结果记录到文件；将其加入 claims ledger（作为新数字，仅从输出中读取时才标记为 `verified: yes`）。如实报告负面或混合结果，并与作者讨论如何呈现。审稿人和 AC 奖励透明度；隐藏的负面结果之后浮出水面要糟糕得多。
 
-## Step 4 — Draft responses
+## Step 4 — 起草回复
 
-Follow `references/rebuttal-playbook.md`. Per reviewer, in priority order (biggest
-concern you can answer well first):
-- open with a one-line thanks and the reviewer's positive points if any,
-- quote the core of each concern briefly, then answer it **directly in the first
-  words** ("Yes, ...", "No, ...", "Not quite: ...", "We ran this: ..."), then the
-  evidence, then context,
-- point to the exact paper location when the answer is already there, and restate it
-  so the response is self-contained,
-- answer the intent behind the question, not only its letter,
-- use data instead of argument wherever possible,
-- end with what will change in the paper.
+遵循 `references/rebuttal-playbook.md`。按审稿人分别处理，按优先级排序（先处理你能回答得最好的最大关切）：
+- 以一句感谢开头，如有审稿人的正面评价也一并提及，
+- 简要引用每条关切的核心内容，然后用**第一句话直接回答**（"Yes, ..."、"No, ..."、"Not quite: ..."、"We ran this: ..."），随后给出证据，再补充背景，
+- 当答案已在论文中时，指出确切的论文位置，并重新陈述以使回复自成一体，
+- 回答问题背后的意图，而不仅仅是字面意思，
+- 尽可能用数据代替论证，
+- 以论文中将做何修改结尾。
 
-Also draft a short **general response** (if the platform/thread structure allows a
-comment visible to all reviewers and the AC): strengths reviewers agreed on, shared
-concerns and how they were addressed, summary of new results. Keep each piece within its
-character limit.
+同时起草一段简短的**总体回复**（如果平台/线程结构允许一条所有审稿人和 AC 都可见的评论）：审稿人一致认可的优点、共享的关切及如何应对、新结果总结。确保每一部分都在字符限制内。
 
-## Step 5 — Check and finalize
+## Step 5 — 检查与定稿
 
-Run `python scripts/check_rebuttal.py .icml/rebuttal/round1/*.md --limit 5000
---names "..." --affils "..."`. It counts characters, flags URLs, identity strings, empty
-promises ("we will ...") without content, combative phrases, apology overuse and
-unresolved placeholders. Then reread each response as the AC: is the answer to every
-major concern clear in the first line? Show drafts to the user for approval before they
-post; the user posts them (you do not submit anything on OpenReview yourself unless the
-user explicitly asks and the environment allows it).
+运行 `python scripts/check_rebuttal.py .icml/rebuttal/round1/*.md --limit 5000 --names "..." --affils "..."`。它会统计字符数、标记 URL、身份字符串、空洞承诺（"we will ..."）而无实质内容、攻击性措辞、过度道歉以及未解决的占位符。然后以 AC 的视角重读每份回复：每个主要关切的答案是否在首行就清晰？在发布前向用户展示草稿供其批准；由用户自行发布（除非用户明确要求且环境允许，否则不要替用户在 OpenReview 上提交）。
 
-## Later rounds
+## 后续轮次
 
-For the author follow-up round: read the reviewer's follow-up, answer only what is new,
-acknowledge changed scores graciously, and do not re-argue settled points. If a reviewer
-did not engage, a short polite note restating the key resolved concern can help the AC.
+对于作者跟进轮次：阅读审稿人的跟进意见，仅回答新增内容，大方地承认分数变化，不要重复争论已解决的问题。如果某位审稿人未参与讨论，一条简短的礼貌说明，重申已解决的关键关切，可以帮助 AC。
 
-## After decisions
+## 决定之后
 
-Keep `promises.md` current; icml-camera-ready reads it and checks that each promised
-change landed in the final version. If the paper is rejected, the triage table and
-promises become the revision plan for the next venue (icml-write).
+保持 `promises.md` 更新；icml-camera-ready 会读取它并检查每项承诺的修改是否已落实到最终版本。如果论文被拒，分类表和承诺将成为投稿下一个会场的修改计划（icml-write）。
 
-## Files
+## 文件
 
-- `scripts/check_rebuttal.py` — length, anonymity and tone checks for response files.
-- `scripts/init_workspace.py` — shared workspace.
-- `references/rebuttal-playbook.md` — principles, triage format, response patterns,
-  phrasing, pitfalls.
-- `references/icml-venue-facts.md`, `references/workspace-contract.md` — shared.
+- `scripts/check_rebuttal.py` — 对回复文件进行长度、匿名性和语气检查。
+- `scripts/init_workspace.py` — 共享工作区。
+- `references/rebuttal-playbook.md` — 原则、分类格式、回复模式、措辞、陷阱。
+- `references/icml-venue-facts.md`、`references/workspace-contract.md` — 共享文件。

@@ -1,14 +1,14 @@
 #!/usr/bin/env python3
-"""Audit a BibTeX file against the LaTeX source of an ICML paper.
+"""对照 ICML 论文的 LaTeX 源文件审计 BibTeX 文件。
 
-Reports: cited keys missing from the .bib; unused entries; duplicate works; missing
-required fields; arXiv/CoRR entries to upgrade; title capitals that BibTeX will
-lowercase; placeholder keys; plain \\cite usage; entries not yet in the verification
-log (.icml/citations_log.md) when --log is given.
+报告：被引用但在 .bib 中缺失的 key；未使用的条目；重复作品；缺失
+必需字段；需要升级的 arXiv/CoRR 条目；BibTeX 会将其小写的标题大写字母；
+占位符 key；普通 \\cite 的使用；当给定 --log 时，尚未出现在验证日志
+(.icml/citations_log.md) 中的条目。
 
-Usage:
+用法：
     python check_bib.py main.tex refs.bib [more.bib ...] [--log .icml/citations_log.md]
-Exit code 1 if any cited key is missing or a placeholder remains.
+若存在被引用的 key 缺失或占位符仍然存在，则退出码为 1。
 """
 import argparse
 import re
@@ -101,8 +101,8 @@ PROPER = {
 
 
 def unprotected_caps(title):
-    """Words BibTeX will lowercase but must keep their capitals: acronyms, CamelCase names,
-    and common proper nouns. Ordinary Title Case words are fine (the style lowercases them)."""
+    """BibTeX 会将其小写但必须保留大写的单词：首字母缩写、驼峰命名，
+    以及常见专有名词。普通的首字母大写标题单词没有问题（样式会将它们小写）。"""
     stripped = re.sub(r"\{[^{}]*\}", " ", title)
     flagged = []
     for w in re.findall(r"[A-Za-z][A-Za-z0-9]*", stripped):
@@ -119,7 +119,7 @@ def main():
     ap = argparse.ArgumentParser(description=__doc__, formatter_class=argparse.RawDescriptionHelpFormatter)
     ap.add_argument("tex")
     ap.add_argument("bib", nargs="+")
-    ap.add_argument("--log", help="path to .icml/citations_log.md")
+    ap.add_argument("--log", help=".icml/citations_log.md 的路径")
     a = ap.parse_args()
 
     entries = {}
@@ -135,12 +135,12 @@ def main():
             for it in items:
                 print(f"  - {it}")
 
-    missing = [f"{k}  (cited at {', '.join(v[:3])})" for k, v in cited.items() if k not in entries]
+    missing = [f"{k}  (在 {', '.join(v[:3])} 被引用)" for k, v in cited.items() if k not in entries]
     placeholders = [k for k in cited if re.search(r"placeholder|verify|todo|citation_?needed", k, re.I)]
     problems += len(missing) + len(placeholders)
-    section("ERROR: cited keys missing from .bib", missing)
-    section("ERROR: placeholder citations still in the text", placeholders)
-    section("Duplicate keys in .bib", [k for k, v in entries.items() if len(v) > 1])
+    section("ERROR: .bib 中缺失的被引用 key", missing)
+    section("ERROR: 文本中仍然存在占位符引用", placeholders)
+    section(".bib 中的重复 key", [k for k, v in entries.items() if len(v) > 1])
 
     seen_titles, dups = {}, []
     for k, v in entries.items():
@@ -152,7 +152,7 @@ def main():
             if ident in seen_titles and seen_titles[ident] != k:
                 dups.append(f"{seen_titles[ident]} == {k}")
             seen_titles.setdefault(ident, k)
-    section("Probable duplicate works under different keys", sorted(set(dups)))
+    section("可能以不同 key 存在的重复作品", sorted(set(dups)))
 
     incomplete, arxiv, caps = [], [], []
     for k, v in entries.items():
@@ -164,26 +164,26 @@ def main():
         if "author" not in f and "editor" not in f and etype not in ("misc", "book"):
             miss.append("author")
         if miss:
-            incomplete.append(f"{k} (@{etype}): missing {', '.join(sorted(set(miss)))}")
+            incomplete.append(f"{k} (@{etype}): 缺失 {', '.join(sorted(set(miss)))}")
         venue = " ".join([f.get("journal", ""), f.get("booktitle", ""), f.get("publisher", ""), f.get("howpublished", ""), f.get("archiveprefix", "")]).lower()
         if "arxiv" in venue or "corr" in venue.split() or f.get("eprint") and not f.get("booktitle"):
             arxiv.append(f"{k}: {f.get('title', '')[:80]}")
         fl = unprotected_caps(f.get("title", ""))
         if fl:
             caps.append(f"{k}: {', '.join(fl[:6])}")
-    section("Entries missing required fields", incomplete)
-    section("arXiv/CoRR entries - check for a published version (cite_lookup.py published)", arxiv)
-    section("Title capitals BibTeX may lowercase - protect proper nouns/acronyms with braces", caps)
-    section("Unused .bib entries (info)", sorted(k for k in entries if k not in cited))
+    section("缺失必需字段的条目", incomplete)
+    section("arXiv/CoRR 条目 - 请检查是否有正式发表版本 (cite_lookup.py published)", arxiv)
+    section("BibTeX 可能小写的标题大写字母 - 请用花括号保护专有名词/首字母缩写", caps)
+    section("未使用的 .bib 条目 (信息)", sorted(k for k in entries if k not in cited))
     if plain:
-        print(f"\n## Plain \\cite used {plain} times - ICML uses natbib: \\citet (textual) or \\citep (parenthetical).")
+        print(f"\n## 普通 \\cite 使用了 {plain} 次 - ICML 使用 natbib: \\citet (文内) 或 \\citep (括号内)。")
 
     if a.log and Path(a.log).exists():
         logged = set(re.findall(r"^\|\s*([^|\s]+)\s*\|\s*(verified|existence-only|placeholder)", Path(a.log).read_text(encoding="utf-8"), re.M))
         logged_keys = {k for k, _ in logged}
-        section("Cited but not in the verification log", sorted(k for k in cited if k not in logged_keys))
+        section("已引用但未在验证日志中", sorted(k for k in cited if k not in logged_keys))
 
-    print(f"\nCited keys: {len(cited)}; .bib entries: {len(entries)}.")
+    print(f"\n被引用 key: {len(cited)}; .bib 条目: {len(entries)}。")
     sys.exit(1 if problems else 0)
 
 

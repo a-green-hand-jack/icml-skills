@@ -1,111 +1,67 @@
 ---
 name: icml-cite
-description: Find, verify and manage references for ICML papers without hallucinated citations. Searches DBLP, Semantic Scholar, arXiv and Crossref, fetches BibTeX programmatically, upgrades arXiv entries to their published versions, checks the .bib against the LaTeX source (missing keys, duplicates, unprotected capitals, incomplete fields), and keeps a verification log. Use this skill whenever an ICML paper needs citations, related-work references, a BibTeX entry, a bibliography cleanup, a check that a cited paper exists or says what the text claims, ICML's APA/natbib citation format, anonymous self-citation, or fixes from the camera-ready Reference Correctness Check - even if the user just says "add a cite for this" or "clean up my bib". Never write BibTeX from memory.
-compatibility: Python 3 standard library. Network access to dblp.org, api.semanticscholar.org, export.arxiv.org and doi.org is needed for lookups; without it, the skill marks citations as placeholders.
+description: 为 ICML 论文查找、验证和管理参考文献，避免虚构引用。搜索 DBLP、Semantic Scholar、arXiv 和 Crossref，以编程方式获取 BibTeX，将 arXiv 条目升级为其正式发表版本，对照 LaTeX 源文件检查 .bib（缺失的 key、重复项、未保护的大写字母、不完整字段），并保留验证日志。当 ICML 论文需要引用、相关工作参考文献、BibTeX 条目、文献清理、确认引用的论文是否存在或是否如文中所述、ICML 的 APA/natbib 引用格式、匿名自引，或 camera-ready 阶段的 Reference Correctness Check 修复时，请使用该 skill——即使用户只说“给这加个引用”或“清理我的 bib”。绝不要凭记忆编写 BibTeX。
+compatibility: Python 3 标准库。查找需要联网访问 dblp.org、api.semanticscholar.org、export.arxiv.org 和 doi.org；若无法联网，该 skill 会将引用标记为占位符。
 ---
 
-# ICML Citations
+# ICML 引用
 
-Language models misremember references: wrong authors, wrong years, wrong venues, and
-papers that do not exist. A fabricated or wrong citation in a submission is a form of
-misconduct, and ICML now runs an automated reference checker at camera-ready. This skill
-makes every reference traceable to a database record.
+语言模型会记错参考文献：错误的作者、错误的年份、错误的会议，以及根本不存在的论文。提交中的虚构或错误引用属于学术不端行为，且 ICML 现已在 camera-ready 阶段运行自动参考文献检查器。本 skill 使每条引用都可追溯到数据库记录。
 
-Talk to the user in their language. This skill shares the `.icml/` workspace with its
-siblings; run `python scripts/init_workspace.py --root <latex-root> --skill icml-cite`
-first, and see `references/workspace-contract.md` for the formats.
+使用用户的语言与其交流。本 skill 与其同级 skill 共享 `.icml/` 工作区；首先运行 `python scripts/init_workspace.py --root <latex-root> --skill icml-cite`，格式说明见 `references/workspace-contract.md`。
 
-## The rule
+## 原则
 
-**Never write or edit a BibTeX entry from memory.** Every entry comes from a database
-response (DBLP, Crossref via DOI, arXiv, Semantic Scholar) or from a file the user
-supplied. If you cannot get one, insert a visible placeholder and tell the user:
+**绝不要凭记忆编写或编辑 BibTeX 条目。** 每条条目必须来自数据库响应（DBLP、Crossref 通过 DOI、arXiv、Semantic Scholar）或用户提供的文件。如果无法获取，插入一个显眼的占位符并告知用户：
 
 ```latex
 \citep{PLACEHOLDER_sparse_moe_routing}  % UNVERIFIED: need a source for "router collapse"
 ```
 
-and add `[cite]` items to `.icml/open_issues.md`. A placeholder is honest; a plausible
-but invented reference is not.
+并将 `[cite]` 项添加到 `.icml/open_issues.md` 中。占位符是诚实的；一个看似合理但编造的引用则不是。
 
-## Workflow: adding a citation
+## 工作流程：添加引用
 
-1. **Know what you need it for.** Write down the exact claim the citation supports
-   ("router collapse happens without load balancing"). Citations support claims, not
-   topics.
-2. **Search.** `python scripts/cite_lookup.py search "query terms" [--year-from 2020]`
-   searches DBLP (best for CS venues incl. ICML/PMLR, NeurIPS, ICLR via OpenReview) and
-   Semantic Scholar. Add `--source arxiv` for preprints. Try several phrasings and author
-   names before concluding a paper does not exist.
-3. **Identify the right record.** Match title, first author and year. Prefer the
-   peer-reviewed version over arXiv when both exist (ICML asks for this at camera-ready;
-   Foerster: Google Scholar often defaults to the arXiv version). Beware workshop
-   versions and same-title follow-ups.
-4. **Fetch BibTeX.** `python scripts/cite_lookup.py bibtex --dblp <key>` or
-   `--doi <doi>` or `--arxiv <id>`. Paste the result unchanged into the `.bib`, then
-   apply only these edits: set the citation key to the project's convention, protect
-   capitals in the title with braces (`{B}ayesian`, `{MCMC}`, `{T}ransformer`), and drop
-   fields the style does not need (abstract, keywords). Never change authors, year,
-   venue or pages by hand.
-5. **Check the claim.** If the claim matters (it supports an argument, a baseline number
-   or a definition), read the abstract or relevant section via the lookup output or the
-   paper's page and confirm it says what the text says. If you cannot access it, log the
-   citation as `existence-verified, claim-unverified` and tell the user.
-6. **Log it** in `.icml/citations_log.md`: key, status (`verified` /
-   `existence-only` / `placeholder`), sources checked, whether a published version
-   exists, notes.
+1. **明确你需要它支持什么。** 写下该引用支持的确切论断（"没有负载均衡时会出现路由崩溃"）。引用支持论断，而不是主题。
+2. **搜索。** `python scripts/cite_lookup.py search "query terms" [--year-from 2020]` 会搜索 DBLP（最适合计算机科学会议，包括 ICML/PMLR、NeurIPS、ICLR 通过 OpenReview）和 Semantic Scholar。添加 `--source arxiv` 以搜索预印本。在断定一篇论文不存在之前，尝试多种措辞和作者名。
+3. **确定正确的记录。** 匹配标题、第一作者和年份。当正式发表版本和 arXiv 版本同时存在时，优先选择前者（ICML 在 camera-ready 阶段要求这样做；Foerster：Google Scholar 通常默认显示 arXiv 版本）。注意 workshop 版本和同名后续论文。
+4. **获取 BibTeX。** `python scripts/cite_lookup.py bibtex --dblp <key>` 或 `--doi <doi>` 或 `--arxiv <id>`。将结果原封不动地粘贴到 `.bib` 中，然后仅做以下编辑：将引用 key 设为项目约定格式、用花括号保护标题中的大写字母（`{B}ayesian`、`{MCMC}`、`{T}ransformer`）、删除样式不需要的字段（abstract、keywords）。绝不要手动修改作者、年份、会议或页码。
+5. **核实论断。** 如果该论断很重要（它支持一个论点、一个基线数字或一个定义），通过查找结果输出或论文页面阅读摘要或相关章节，确认它确实如文中所述。如果无法访问，将该引用记录为 `existence-verified, claim-unverified` 并告知用户。
+6. **记录**到 `.icml/citations_log.md`：key、状态（`verified` / `existence-only` / `placeholder`）、已检查的源、是否存在正式发表版本、备注。
 
-## Workflow: auditing a bibliography
+## 工作流程：审计参考文献
 
-Run `python scripts/check_bib.py main.tex refs.bib`. It reports:
-- cited keys missing from the `.bib`, and unused entries,
-- duplicate entries (same title or same DOI/arXiv id under different keys),
-- entries missing required fields for their type,
-- arXiv-only or CoRR entries (candidates for upgrading to the published version),
-- titles with capitals that BibTeX will lowercase (unprotected acronyms and proper nouns),
-- placeholder keys still present,
-- plain `\cite` uses (ICML uses natbib: `\citet` vs `\citep`).
+运行 `python scripts/check_bib.py main.tex refs.bib`。它会报告：
+- `.bib` 中缺失的被引用 key，以及未使用的条目，
+- 重复条目（同一标题或同一 DOI/arXiv id 在不同 key 下），
+- 条目缺失其类型所必需的字段，
+- 仅 arXiv 或 CoRR 条目（可升级至正式发表版本的候选），
+- BibTeX 会将其小写的标题大写字母（未保护的首字母缩写和专有名词），
+- 仍然存在的占位符 key，
+- 使用普通 `\cite`（ICML 使用 natbib：`\citet` 与 `\citep`）。
 
-Then verify each entry not yet in `citations_log.md`, prioritising entries that support
-claims in the abstract, introduction and experiments, and every baseline. For arXiv
-entries run `python scripts/cite_lookup.py published "<title>"` to find a published
-version.
+然后核实每个尚未在 `citations_log.md` 中的条目，优先核实支持摘要、引言和实验部分中论断的条目，以及每个基线。对于 arXiv 条目，运行 `python scripts/cite_lookup.py published "<title>"` 以查找正式发表版本。
 
-## ICML-specific rules
+## ICML 专属规则
 
-Read `references/citation-rules.md` for details. The essentials:
-- APA author–year via `natbib` and `\bibliographystyle{icml20XX}`. `\citet{}` when the
-  authors are a grammatical part of the sentence, `\citep{}` otherwise; multiple
-  citations in chronological order.
-- Anonymous submission: cite your own published work in the third person, as if someone
-  else wrote it; do not anonymize published entries in the reference list. Unpublished
-  own work (e.g., under review elsewhere) is cited anonymously and uploaded as anonymized
-  supplementary material.
-- Works made public less than two months before the deadline are concurrent work at
-  ICML; citing them is optional.
-- Camera-ready: replace arXiv citations with peer-reviewed versions where possible; fix
-  every item in OpenReview's "Reference Correctness Check"; keep author names current.
+详细说明见 `references/citation-rules.md`。要点：
+- 通过 `natbib` 和 `\bibliographystyle{icml20XX}` 实现 APA 作者-年份格式。当作者作为句子的语法成分时，使用 `\citet{}`，否则使用 `\citep{}`；多个引用按时间顺序排列。
+- 匿名提交：以第三人称引用自己已发表的工作，仿佛是由他人撰写的；不要在参考文献列表中对已发表的条目进行匿名化。自己未发表的工作（例如，正在其他地方审稿）以匿名方式引用，并作为匿名补充材料上传。
+- 在截止日期前不到两个月公开的工作属于 ICML 的同期工作；引用它们是可选的。
+- Camera-ready：尽可能将 arXiv 引用替换为正式发表版本；修复 OpenReview "Reference Correctness Check" 中的每一项；保持作者姓名最新。
 
-## Related work support
+## 相关工作支持
 
-When icml-write asks for related work, return for each candidate: verified BibTeX, one
-sentence on what the paper does (from its abstract, in your own words), and how it
-relates to the project (same problem / same technique / baseline candidate). Group by
-methodological line so the related-work section can compare and contrast rather than
-list papers. Flag any method that is applicable to the problem setting: icml-write must
-either compare against it or state why it is not applicable.
+当 icml-write 请求相关工作时，为每个候选返回：已验证的 BibTeX、一句话说明该论文做什么（来自其摘要，用自己的话概括），以及它与项目的关系（同一问题 / 同一技术 / 基线候选）。按方法论脉络分组，使相关工作部分能够进行比较和对比，而不是罗列论文。标记任何适用于该问题设定的方法：icml-write 必须要么与其进行比较，要么说明为什么不适用。
 
-## When offline
+## 离线时
 
-If lookups fail (no network), say so explicitly, keep existing verified entries, add
-placeholders for new ones, and list them for the user. Do not "fill in" from memory even
-for famous papers - famous papers are exactly where confident misremembering happens
-(wrong year, arXiv vs. conference version).
+如果查找失败（无网络），明确告知用户，保留已有的已验证条目，为新条目添加占位符，并列出它们。即使对于著名论文也不要"凭记忆补全"——著名论文正是自信地记错细节的地方（错误的年份、arXiv 版本与会议版本混淆）。
 
-## Files
+## 文件
 
-- `scripts/cite_lookup.py` — search / bibtex / published-version lookups (stdlib only).
-- `scripts/check_bib.py` — bibliography audit against the LaTeX source.
-- `scripts/init_workspace.py` — create the shared `.icml/` workspace.
-- `references/citation-rules.md` — ICML citation format, anonymity, BibTeX hygiene.
-- `references/workspace-contract.md`, `references/icml-venue-facts.md` — shared.
+- `scripts/cite_lookup.py` — 搜索 / bibtex / 正式发表版本查找（仅标准库）。
+- `scripts/check_bib.py` — 对照 LaTeX 源文件进行参考文献审计。
+- `scripts/init_workspace.py` — 创建共享的 `.icml/` 工作区。
+- `references/citation-rules.md` — ICML 引用格式、匿名性、BibTeX 规范。
+- `references/workspace-contract.md`、`references/icml-venue-facts.md` — 共享文件。

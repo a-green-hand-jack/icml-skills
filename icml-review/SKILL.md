@@ -1,41 +1,30 @@
 ---
 name: icml-review
-description: Audit an ICML paper before submission and simulate ICML peer review. Runs mechanical compliance checks (8-page limit, anonymity leaks including PDF metadata, abstract form, Impact Statement, forbidden layout hacks, hidden text that counts as prompt injection, broken references) and then writes a critical review on ICML's actual form - soundness, presentation, significance, originality, key questions, limitations, overall score. Read-only - it reports, it does not edit the paper. Use this skill whenever the user wants an ICML draft checked, critiqued, scored, stress-tested, red-teamed or "reviewed like a reviewer would", wants to know if it is ready to submit, asks what reviewers will attack, or wants a format/anonymity check - even if they only say "take a look at my paper" or "is this ready?". For rewriting use icml-write; for answering real reviews use icml-rebuttal.
-compatibility: Python 3. Optional - poppler-utils (pdftotext, pdfinfo, pdffonts) for PDF checks; pdflatex to compile.
+description: 在投稿前审计 ICML 论文并模拟 ICML 同行评审。运行机械合规性检查（8 页限制、匿名性泄露包括 PDF 元数据、摘要格式、影响声明、禁止的布局技巧、视为提示注入的隐藏文本、损坏的引用），然后按照 ICML 的实际评审标准撰写评审意见——严谨性、表达、重要性、原创性、关键问题、局限性、总体分数。只读——它报告问题，不编辑论文。每当用户想要检查 ICML 初稿、进行批判、打分、压力测试、红队测试或"像审稿人一样评审"、想知道是否准备好投稿、询问审稿人会攻击什么，或想要格式/匿名性检查时，使用此技能——即使他们只说"看一下我的论文"或"准备好了吗？"。改写请使用 icml-write；回复真实评审意见请使用 icml-rebuttal。
+compatibility: Python 3。可选 — poppler-utils (pdftotext, pdfinfo, pdffonts) 用于 PDF 检查；pdflatex 用于编译。
 ---
 
-# ICML Pre-Submission Review
+# ICML 投稿前评审
 
-Two jobs: (1) catch everything that can get a paper desk-rejected or quietly marked down
-for form, and (2) read the paper the way an ICML reviewer will, then report what they
-will say. This skill does not edit the paper. Separating review from writing keeps the
-reviewer honest and keeps a clean record of what was found.
+两项工作：(1) 捕获所有可能导致论文被 desk-rejected（直接拒稿）或因格式问题被悄悄降分的问题，(2) 像 ICML 审稿人一样阅读论文，然后报告他们会说什么。此技能不编辑论文。将评审与写作分开，既能让评审保持客观，也能清晰记录发现的问题。
 
-Talk to the user in their language; write the review itself in English (it mirrors the
-OpenReview form) unless the user asks otherwise.
+用用户的语言与他们交流；评审报告本身用英文撰写（它模拟 OpenReview 表格），除非用户另有要求。
 
-## Independence matters
+## 独立性至关重要
 
-The agent that wrote the paper knows what every sentence was meant to say and will not
-notice where readers get lost. Farquhar also notes that LLMs lean agreeable and need
-repeated pushing to be properly critical. So:
-- Prefer running this skill in a **fresh session or a sub-agent** that has not seen the
-  drafting conversation. Give it the PDF (or LaTeX) and, at most, `.icml/venue_facts.md`.
-  Do not give it `claims.md` or notes for the review pass - reviewers will not have them.
-- Read as a busy expert with 5-10 papers to review: title, abstract, Figure 1,
-  introduction, figures, then the rest. Note where you would have stopped reading.
-- Assume a bold claim is false and look for the hole (Nanda). Then check whether the
-  paper already pre-empted it.
-- Be specific. Every weakness must point to a location and say what would fix it.
+撰写论文的 agent 知道每句话的意图，因此不会注意到读者在哪里感到困惑。Farquhar 也指出，LLM 倾向于赞同他人观点，需要反复推动才能进行真正的批判。因此：
+- 最好在一个**未见过起草对话的新会话或子 agent** 中运行此技能。给它 PDF（或 LaTeX），最多再提供 `.icml/venue_facts.md`。不要给它 `claims.md` 或评审用的笔记——审稿人不会有这些材料。
+- 像一位忙碌的专家一样阅读，手头有 5–10 篇论文要审：标题、摘要、图 1、引言、图表，然后是其余部分。记录你会在哪里停止阅读。
+- 假设一个大胆的主张是错的，然后寻找漏洞（Nanda）。再检查论文是否已经预先回应了它。
+- 要具体。每个弱点必须指出位置，并说明如何修复。
 
-## Step 0 — Setup
+## 第 0 步 — 准备
 
-Run `python scripts/init_workspace.py --root <latex-root> --skill icml-review`. Read
-`.icml/venue_facts.md` (or `references/icml-venue-facts.md` if there is no workspace);
-refresh it if the target year differs. Compile the paper if you can, so you review the
-PDF reviewers will see.
+运行 `python scripts/init_workspace.py --root <latex-root> --skill icml-review`。读取
+`.icml/venue_facts.md`（如果没有工作区则读取 `references/icml-venue-facts.md`）；
+如果目标年份不同，则刷新它。如果可能，编译论文，这样你审阅的就是审稿人将看到的 PDF。
 
-## Part A — Compliance audit (mechanical)
+## A 部分 — 合规性审计（机械检查）
 
 ```bash
 python scripts/check_submission.py --tex main.tex --pdf main.pdf \
@@ -43,56 +32,54 @@ python scripts/check_submission.py --tex main.tex --pdf main.pdf \
     [--pristine-sty /path/to/official/icml2026.sty] [--position-track]
 ```
 
-Ask the user for author names and affiliations (and lab/cluster names, usernames) if you
-do not have them; anonymity checks are weak without them. Then do the checks the script
-cannot do, listed in `references/compliance-checks.md`: open figures for embedded names,
-check supplementary code for identity leaks, read every self-citation, check that the
-OpenReview abstract matches, check that nothing reviewers need lives only in the appendix.
+如果你不知道作者姓名和 affiliations（以及实验室/集群名称、用户名），向用户询问；
+没有这些信息，匿名性检查会很弱。然后做脚本无法做的检查，列在
+`references/compliance-checks.md` 中：打开图表检查嵌入的姓名，
+检查补充代码中的身份泄露，阅读每一条自引，确认 OpenReview 摘要是否匹配，
+确认审稿人需要的内容没有只存在于附录中。
 
-If icml-cite is available, also run its `check_bib.py`. Otherwise at least confirm no
-`??` or `(?)` in the PDF and no placeholder keys.
+如果 icml-cite 可用，同时运行它的 `check_bib.py`。否则至少确认 PDF 中没有 `??` 或 `(?)`，
+也没有占位引用 key。
 
-Classify findings: **Desk-reject risk** (page limit, anonymity, missing Impact Statement,
-hidden text, template modification), **Must fix**, **Should fix**.
+对发现进行分类：**Desk-reject 风险**（页数限制、匿名性、缺少影响声明、
+隐藏文本、模板修改）、**必须修复**、**建议修复**。
 
-## Part B — Simulated ICML review
+## B 部分 — 模拟 ICML 评审
 
-Read `references/review-rubric.md` and fill its template. In brief:
-1. **Summary** the authors would agree with, in your own words.
-2. **Claims check**: list the paper's claims (from abstract, intro, contribution list);
-   for each, the evidence offered and whether it suffices. This is the heart of
-   soundness. Check that text descriptions of figures and tables are literally true.
-3. **Strengths and weaknesses** across soundness, presentation, significance,
-   originality - with ICML's broad view of originality (new insight into existing
-   methods counts) and with soundness judged separately from impact.
-4. **Scores** on ICML's scales (1–4 per dimension, overall 1–6, confidence 1–5), each
-   "fair"/"poor" justified.
-5. **Key questions** (3–5, numbered): questions whose answers would change the score.
-   These are the most useful output: they predict the rebuttal.
-6. **Limitations** assessment.
-7. **Reviewer-type variants**: briefly, how a skeptical theorist, a practitioner who
-   wants baselines and compute details, and a reviewer from a neighbouring subfield
-   would each react.
+阅读 `references/review-rubric.md` 并填写其模板。简要说明：
+1. **Summary**：用你自己的话写一个作者会同意的内容摘要。
+2. **Claims check**：列出论文的主张（来自摘要、引言、贡献列表）；
+   对每个主张，检查提供的证据是否充分。这是严谨性的核心。
+   检查图表的文字描述是否完全属实。
+3. **Strengths and weaknesses**：涵盖严谨性、表达、重要性、
+   原创性——采用 ICML 对原创性的宽泛定义（对现有方法的新洞察也算），
+   并且将严谨性与影响力分开评判。
+4. **Scores**：按照 ICML 的评分标准（每个维度 1–4，总体 1–6，置信度 1–5），
+   每个 "fair"/"poor" 都要给出理由。
+5. **Key questions**（3–5 个，编号）：答案会改变分数的问题。
+   这些是最有用的输出：它们预测了 rebuttal。
+6. **Limitations** 评估。
+7. **Reviewer-type variants**：简要说明怀疑派理论家、
+   想要基线和计算细节的实践者、以及来自相邻子领域的审稿人各自会如何反应。
 
-Calibration: most submissions are not accepted. Do not give 5–6 unless the paper is
-genuinely strong on every dimension; if you find yourself praising everything, go back
-and look for the weakest claim.
+校准：大多数投稿不会被接收。除非论文在每个维度上真正很强，否则不要给 5–6；
+如果你发现自己什么都夸，回去找最弱的主张。
 
-## Part C — Report and hand-off
+## C 部分 — 报告与交接
 
-Write the report to `.icml/reviews/simulated-<YYYY-MM-DD>.md` (format in the rubric
-file) with: compliance findings by severity, the simulated review, and a prioritised fix
-list mapping each issue to the place in the paper and to the kind of fix (writing,
-experiment, citation, human decision). Add human-only items to `open_issues.md`.
-Update `state.md`. Tell the user the three most important things in plain terms and
-suggest handing the fix list to icml-write; save the key questions for icml-rebuttal.
+将报告写入 `.icml/reviews/simulated-<YYYY-MM-DD>.md`（格式见 rubric 文件），
+内容包括：按严重程度排列的合规性发现、模拟评审、以及一个优先级排序的修复列表，
+将每个问题映射到论文中的位置和修复类型（写作、实验、引用、人工决策）。
+将只能由人工处理的事项添加到 `open_issues.md`。
+更新 `state.md`。用通俗语言告诉用户三件最重要的事，
+并建议将修复列表交给 icml-write；将关键问题留给 icml-rebuttal。
 
-Do not edit the paper in this skill, even for trivial fixes - list them instead.
+在此技能中，即使是最小的修复也不要编辑论文——把它们列出来。
 
-## Files
+## 文件
 
-- `scripts/check_submission.py` — mechanical compliance checks (shared with icml-camera-ready).
-- `scripts/init_workspace.py` — create the shared `.icml/` workspace.
-- `references/review-rubric.md` — ICML review form, scales, reading protocol, report template.
-- `references/compliance-checks.md` — what each check means, how to fix, manual checks.
-- `references/icml-venue-facts.md`, `references/workspace-contract.md` — shared.
+- `scripts/check_submission.py` — 机械合规性检查（与 icml-camera-ready 共享）。
+- `scripts/init_workspace.py` — 创建共享的 `.icml/` 工作区。
+- `references/review-rubric.md` — ICML 评审表、评分标准、阅读协议、报告模板。
+- `references/compliance-checks.md` — 每个检查的含义、如何修复、人工检查项。
+- `references/icml-venue-facts.md`、`references/workspace-contract.md` — 共享文件。

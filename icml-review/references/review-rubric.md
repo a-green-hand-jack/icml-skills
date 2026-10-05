@@ -1,149 +1,132 @@
-# ICML Review Rubric and Report Template
+# ICML 评审标准与报告模板
 
-Based on the ICML 2026 Reviewer Instructions (main track). Scales and wording are
-year-specific: compare with `.icml/venue_facts.md` §6.
+基于 ICML 2026 审稿人指南（主轨）。评分标准和措辞是年份特定的：
+与 `.icml/venue_facts.md` §6 进行对比。
 
-## Contents
-1. Reading protocol
-2. The four dimensions, as ICML defines them
-3. Scales
-4. Evidence checklist (soundness)
-5. Presentation checklist
-6. Report template
+## 目录
+1. 阅读协议
+2. 四个维度，按 ICML 的定义
+3. 评分标准
+4. 证据检查清单（严谨性）
+5. 表达检查清单
+6. 报告模板
 
-## 1. Reading protocol
+## 1. 阅读协议
 
-1. Read title + abstract + Figure 1 only. Write one sentence: what does the paper claim?
-   If you cannot, that is a presentation finding.
-2. Read the introduction. List the claims and the promised evidence. Note the first
-   place you were confused or unconvinced.
-3. Look at every figure and table with its caption before reading the text about it.
-   Write what you think each shows. Then read the text and compare.
-4. Read method and experiments with the claims list in hand. For each claim: which
-   experiment supports it? Is it sufficient? What alternative explanation remains?
-5. Skim related work: is the closest work compared against or excused?
-6. Read limitations. Did the authors name the weaknesses you found?
-7. Check the appendix only for things the main text depends on (reviewers are not
-   required to read it - if the main text needs it, that is a finding).
+1. 只读标题 + 摘要 + 图 1。写一句话：这篇论文主张什么？
+   如果你做不到，这就是一个表达方面的发现。
+2. 阅读引言。列出主张和承诺的证据。记录你第一次感到困惑或不信服的地方。
+3. 在阅读相关文字之前，先看每一张图和每一个表及其标题。
+   写下你认为每个图表展示了什么。然后阅读文字并对比。
+4. 拿着主张清单阅读方法和实验部分。对每个主张：哪个实验支持它？
+   是否充分？还有什么替代解释？
+5. 浏览相关工作：最近的工作是被比较了还是被搪塞了？
+6. 阅读局限性。作者是否说出了你发现的弱点？
+7. 仅当主文依赖附录时才检查附录（审稿人没有义务阅读它——如果主文需要它，这就是一个发现）。
 
-## 2. The four dimensions (ICML's own framing, paraphrased)
+## 2. 四个维度（ICML 自己的框架，意译）
 
-- **Soundness**: technically correct? Claims supported by theory or experiments? Methods
-  appropriate? Proofs correct under reasonable assumptions? Experiments well designed?
-  Are the authors honest about strengths and weaknesses? *Judged separately from
-  impact*: a modest paper can be fully sound; a high-impact idea must meet the same bar.
-- **Presentation**: clear and well structured? Narrative easy to follow? Positioned
-  against prior and concurrent work, with differences stated? Could an expert reproduce
-  the results from the paper?
-- **Significance**: important problem? Advances understanding, capabilities or practice?
-  Likely to be built on? Is the breadth of impact appropriate to the contribution? Modest
-  or domain-specific gains can still be significant if they unlock directions or are
-  practically useful.
-- **Originality**: new insights, deeper understanding, important properties of existing
-  methods, new tasks/methods/theory/data/perspectives, or well-reasoned novel
-  combinations. Originality does not require a new method; careful evaluation that
-  yields new insight counts equally.
+- **严谨性（Soundness）**：技术上正确吗？主张有理论或实验支持吗？方法恰当吗？
+  证明在合理假设下正确吗？实验设计良好吗？作者是否诚实地说明了优缺点？
+  *独立于影响力评判*：一篇朴实的论文可以完全严谨；一个高影响力的想法必须达到同样的门槛。
+- **表达（Presentation）**：清晰且结构良好吗？叙述易于跟随吗？
+  与先前和同期工作进行了定位，并说明了差异吗？专家能否根据论文复现结果？
+- **重要性（Significance）**：重要的问题吗？推进了理解、能力或实践吗？
+  可能被后续工作借鉴吗？影响的广度是否与贡献相匹配？
+  适度或特定领域的增益如果开辟了方向或具有实际用途，仍然可以具有重要意义。
+- **原创性（Originality）**：新的洞察、更深入的理解、现有方法的重要性质、
+  新的任务/方法/理论/数据/视角，或推理充分的新颖组合。
+  原创性不要求新方法；仔细评估带来新洞察同样算数。
 
-Also: **Limitations** - authors should be rewarded, not punished, for being upfront
-about limitations and potential negative societal impact.
+此外：**局限性** — 作者应该因坦诚说明局限性和潜在负面社会影响而获得奖励，而非惩罚。
 
-## 3. Scales
+## 3. 评分标准
 
-Per dimension: 4 excellent, 3 good, 2 fair, 1 poor (fair/poor need a written
-justification in strengths and weaknesses).
+每个维度：4 优秀，3 良好，2 一般，1 较差（一般/较差需要在优缺点中给出书面理由）。
 
-Overall recommendation:
-- 6 Strong Accept - technically flawless, exceptional impact, strong evaluation and
-  reproducibility, no unaddressed ethical issues.
-- 5 Accept - technically solid, high impact on a sub-area or moderate-to-high on several,
-  good-to-excellent evaluation and reproducibility.
-- 4 Weak accept - technically solid, advances a sub-area, others likely to build on it,
-  but weaknesses (e.g., limited evaluation) limit impact. Use sparingly.
-- 3 Weak reject - clear merits, but weaknesses outweigh them; needs revision before
-  others can build on it. Use sparingly.
-- 2 Reject - e.g., technical flaws, weak evaluation, inadequate reproducibility, or
-  writing too poor to understand the key claims.
-- 1 Strong Reject - e.g., well-known results, unaddressed ethics, or impossible to tell
-  what the contribution is.
+总体推荐：
+- 6 Strong Accept — 技术上无瑕疵，影响力卓越，评估和可重复性强，无未解决的伦理问题。
+- 5 Accept — 技术扎实，对子领域有高影响力或对多个领域有中高影响力，
+  评估和可重复性良好至优秀。
+- 4 Weak accept — 技术扎实，推进了子领域，其他人可能在此基础上继续，
+  但弱点（例如评估有限）限制了影响力。谨慎使用。
+- 3 Weak reject — 有明显优点，但弱点超过优点；需要修改后他人才能在此基础上继续。
+  谨慎使用。
+- 2 Reject — 例如技术缺陷、评估薄弱、可重复性不足，或写作太差无法理解关键主张。
+- 1 Strong Reject — 例如已知结果、未解决的伦理问题，或根本无法判断贡献是什么。
 
-Confidence: 5 certain (checked math/details) … 1 educated guess.
+置信度：5 确定（检查了数学/细节）… 1 有根据的猜测。
 
-## 4. Evidence checklist (soundness)
+## 4. 证据检查清单（严谨性）
 
-- Each claim in abstract/intro has a matching experiment or theorem in the main body.
-- Claim wording matches evidence strength (no "consistently" for 3 of 5; no "proves"
-  for empirical results; scope stated).
-- Baselines: strongest reasonable ones, tuned with comparable effort, tuning described.
-  Every applicable method from related work is compared or excused.
-- Variance: number of runs, error bars defined, differences larger than noise;
-  statistical tests where claims rest on small differences.
-- Ablations for multi-component methods.
-- Alternative explanations: for each headline result, the most obvious confound - is
-  it ruled out?
-- Data: train/test leakage, contamination (especially for LLM evaluations), selection of
-  qualitative examples (cherry-picking disclosed?).
-- Compute and hyperparameters reported; code or enough detail to reproduce.
-- Theory: assumptions explicit and reasonable; proofs present (appendix ok); theorem
-  statements match what the text claims they show.
-- Text matches figures/tables (literally check numbers, trends and which line is which).
-- Numbers consistent across abstract, intro, tables and text.
+- 摘要/引言中的每个主张在主文中都有匹配的实验或定理。
+- 主张措辞与证据强度匹配（没有为 3/5 次写 "consistently"；没有为实验结果写 "proves"；声明了范围）。
+- 基线：最强且合理的基线，以可比 effort 调优，调优过程被描述。
+  相关工作中的每个适用方法都被比较或说明了不比较的理由。
+- 方差：运行次数、误差条定义、差异大于噪声；
+  当主张依赖于微小差异时进行统计检验。
+- 多组件方法的消融实验。
+- 替代解释：对每个 headline 结果，最明显的混淆因素 — 是否被排除了？
+- 数据：训练/测试泄露、污染（尤其是 LLM 评估）、定性示例的选择（是否披露了 cherry-picking？）。
+- 计算量和超参数被报告；代码或足够细节以复现。
+- 理论：假设明确且合理；证明存在（附录可接受）；定理陈述与正文声称它们展示的内容匹配。
+- 文字与图表/表格匹配（逐字检查数字、趋势和每条线对应什么）。
+- 数字在摘要、引言、表格和正文中一致。
 
-## 5. Presentation checklist
+## 5. 表达检查清单
 
-- Contribution clear by the end of page 1; method begins by page 2–3.
-- Figure 1 conveys the main idea or result; captions stand alone; axes labelled; legible
-  in grayscale; colorblind-safe.
-- One term per concept; acronyms defined; notation consistent.
-- Related work compares and contrasts (methodologically), not a list.
-- Background limited to what is needed; boilerplate in the appendix.
-- No overclaiming adjectives, hype openers, or LLM-tell phrasing; no dangling
-  "we will" promises; no broken references.
-- Limitations section exists and is specific.
+- 第 1 页结束前贡献清晰；方法在第 2–3 页开始。
+- 图 1 传达了主要思想或结果；标题独立成文；标注坐标轴；灰度下清晰；色盲友好。
+- 每个概念一个术语；缩写有定义；符号一致。
+- 相关工作进行比较和对比（方法论层面），而非罗列。
+- 背景限于所需内容；套话放在附录。
+- 没有夸大形容词、炒作式开场白或 LLM 口吻措辞；没有悬而未决的 "we will" 承诺；没有损坏的引用。
+- 存在局限性章节且内容具体。
 
-## 6. Report template
+## 6. 报告模板
 
 ```markdown
-# Simulated ICML Review — <paper title> — <date>
-Reviewer stance: <fresh context? which materials were read?>
+# 模拟 ICML 评审 — <论文标题> — <日期>
+评审立场：<新上下文？阅读了哪些材料？>
 
-## A. Compliance
-### Desk-reject risks
-- [CODE] <finding> — <location> — <fix>
-### Must fix
-### Should fix
-### Manual checks done / not done
+## A. 合规性
+### Desk-reject 风险
+- [CODE] <发现> — <位置> — <修复>
+### 必须修复
+### 建议修复
+### 已完成/未完成的人工检查
 
-## B. Review (ICML main-track form)
-**Summary.** <3–5 sentences the authors would agree with>
+## B. 评审（ICML 主轨表格）
+**摘要。** <3–5 句作者会同意的话>
 
-**Claims and evidence.**
-| # | Claim (as stated) | Evidence in paper | Sufficient? | Gap |
+**主张与证据。**
+| # | 主张（原文） | 论文中的证据 | 充分？ | 差距 |
 |---|---|---|---|---|
 
-**Strengths.**
-- Soundness: ...
-- Presentation: ...
-- Significance: ...
-- Originality: ...
+**优点。**
+- 严谨性：...
+- 表达：...
+- 重要性：...
+- 原创性：...
 
-**Weaknesses.** (each with location and a concrete fix)
+**弱点。**（每条都带位置和具体修复方法）
 1. ...
 
-**Scores.** Soundness x/4 · Presentation x/4 · Significance x/4 · Originality x/4 ·
-Overall x/6 · Confidence x/5
-Justification for any fair/poor: ...
+**分数。** 严谨性 x/4 · 表达 x/4 · 重要性 x/4 · 原创性 x/4 ·
+总体 x/6 · 置信度 x/5
+对任何一般/较差项的理由：...
 
-**Key questions for the authors.** (3–5; say how each answer would change the score)
+**给作者的关键问题。**（3–5 个；说明每个答案会如何改变分数）
 1. ...
 
-**Limitations.** yes / suggestions: ...
+**局限性。** 有 / 建议：...
 
-**Other reviewer perspectives.**
-- Theory-minded: ...
-- Practitioner/baselines: ...
-- Neighbouring subfield: ...
+**其他审稿人视角。**
+- 理论派：...
+- 实践/基线派：...
+- 相邻子领域：...
 
-## C. Prioritised fix list
-| Priority | Issue | Location | Fix type (writing/experiment/citation/human) | Est. effort |
+## C. 优先级排序的修复列表
+| 优先级 | 问题 | 位置 | 修复类型（写作/实验/引用/人工） | 预计工作量 |
 |---|---|---|---|---|
 ```

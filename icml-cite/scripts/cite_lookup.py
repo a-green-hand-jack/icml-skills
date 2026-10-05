@@ -1,19 +1,18 @@
 #!/usr/bin/env python3
-"""Look up papers and fetch BibTeX from real databases (never from memory).
+"""从真实数据库查找论文并获取 BibTeX（绝不要凭记忆）。
 
-Subcommands:
+子命令：
   search QUERY [--source dblp|s2|arxiv|all] [--year-from Y] [--limit N]
-      Search for candidate papers. Prints title, authors, venue, year and the IDs you
-      need for `bibtex`.
+      搜索候选论文。打印标题、作者、会议、年份以及 `bibtex` 所需的 ID。
   bibtex (--dblp KEY | --doi DOI | --arxiv ID)
-      Print the BibTeX record from DBLP, Crossref (via doi.org) or arXiv.
+      从 DBLP、Crossref（通过 doi.org）或 arXiv 打印 BibTeX 记录。
   published TITLE
-      For an arXiv/CoRR paper, look for a peer-reviewed version with a matching title.
+      对于 arXiv/CoRR 论文，查找标题匹配的正式发表版本。
   abstract (--arxiv ID | --s2 PAPER_ID | --doi DOI)
-      Print the abstract (to check that a paper says what you cite it for).
+      打印摘要（用于确认论文确实如你引用它时所述）。
 
-Standard library only. Exit code 3 means the network/database was unreachable: in that
-case insert a PLACEHOLDER citation and tell the user - do not fill in from memory.
+仅使用标准库。退出码 3 表示网络/数据库不可达：此时插入一个 PLACEHOLDER
+引用并告知用户——绝不要凭记忆补全。
 """
 import argparse
 import difflib
@@ -47,7 +46,7 @@ def get(url, accept=None, retries=2):
             if e.code == 404:
                 return None
             break
-        except Exception as e:  # network down, DNS, proxy
+        except Exception as e:  # 网络断开、DNS、代理
             last = e
             if attempt < retries:
                 time.sleep(1); continue
@@ -59,7 +58,7 @@ def sim(a, b):
     return difflib.SequenceMatcher(None, norm(a), norm(b)).ratio()
 
 
-# ---------------------------------------------------------------- sources
+# ---------------------------------------------------------------- 数据源
 
 def dblp_search(q, limit=10):
     url = "https://dblp.org/search/publ/api?" + urllib.parse.urlencode({"q": q, "format": "json", "h": limit})
@@ -117,13 +116,13 @@ def arxiv_search(q, limit=10):
     return out
 
 
-# ---------------------------------------------------------------- commands
+# ---------------------------------------------------------------- 命令
 
 def show(results, year_from=None):
     if year_from:
         results = [r for r in results if not r["year"] or int(str(r["year"])[:4] or 0) >= year_from]
     if not results:
-        print("No results. Try other phrasings, an author name, or another --source.")
+        print("无结果。尝试其他措辞、作者名或另一 --source。")
     for i, r in enumerate(results, 1):
         au = ", ".join(r["authors"][:4]) + (" et al." if len(r["authors"]) > 4 else "")
         ids = ", ".join(f"{k}={v}" for k, v in r["ids"].items() if v)
@@ -145,14 +144,14 @@ def cmd_search(a):
         except ConnectionError as e:
             errors.append(f"{s}: {e}")
     if errors and not res:
-        print("DATABASES UNREACHABLE - this is NOT evidence that the paper does not exist.\n"
-              "Insert a PLACEHOLDER citation, log it as [cite] in .icml/open_issues.md, and tell the user.\n"
-              "Do not fill in the reference from memory.")
-        print("Details: " + "; ".join(errors), file=sys.stderr)
+        print("数据库不可达——这**不是**论文不存在的证据。\n"
+              "插入一个 PLACEHOLDER 引用，在 .icml/open_issues.md 中将其记录为 [cite]，并告知用户。\n"
+              "绝不要凭记忆补全引用。")
+        print("详情: " + "; ".join(errors), file=sys.stderr)
         sys.exit(3)
     show(res, a.year_from)
     if errors:
-        print("\nPartly unreachable (results may be incomplete): " + "; ".join(errors), file=sys.stderr)
+        print("\n部分不可达（结果可能不完整）: " + "; ".join(errors), file=sys.stderr)
 
 
 def cmd_bibtex(a):
@@ -166,20 +165,20 @@ def cmd_bibtex(a):
             aid = re.sub(r"^arxiv:", "", a.arxiv, flags=re.I)
             txt = get(f"https://arxiv.org/bibtex/{aid}")
     except ConnectionError as e:
-        print(f"Unreachable: {e}\nInsert a PLACEHOLDER citation and tell the user.", file=sys.stderr)
+        print(f"不可达: {e}\n插入一个 PLACEHOLDER 引用并告知用户。", file=sys.stderr)
         sys.exit(3)
     if not txt or "@" not in txt:
-        print("No BibTeX record found for that identifier.", file=sys.stderr)
+        print("未找到该标识符的 BibTeX 记录。", file=sys.stderr)
         sys.exit(1)
     print(txt.strip())
-    print("\n% Source: database record. Allowed edits: citation key, brace-protect title capitals, drop unused fields.", file=sys.stderr)
+    print("\n% 来源：数据库记录。允许的编辑：引用 key、用花括号保护标题大写字母、删除未使用的字段。", file=sys.stderr)
 
 
 def cmd_published(a):
     try:
         cands = dblp_search(a.title, 15)
     except ConnectionError as e:
-        print(f"Unreachable: {e}", file=sys.stderr); sys.exit(3)
+        print(f"不可达: {e}", file=sys.stderr); sys.exit(3)
     found = False
     for c in cands:
         s = sim(a.title, c["title"])
@@ -187,10 +186,10 @@ def cmd_published(a):
         is_preprint = venue.lower() in ("corr", "arxiv") or c["ids"]["dblp"].startswith("journals/corr")
         if s >= 0.9 and not is_preprint:
             found = True
-            print(f"PUBLISHED: {c['title']} | {venue} {c['year']} | dblp={c['ids']['dblp']} doi={c['ids']['doi']} (title similarity {s:.2f})")
+            print(f"已发表: {c['title']} | {venue} {c['year']} | dblp={c['ids']['dblp']} doi={c['ids']['doi']} (标题相似度 {s:.2f})")
     if not found:
-        print("No peer-reviewed version with a matching title found on DBLP. Check the title for renames "
-              "(published versions are often retitled), the authors' pages, or OpenReview.")
+        print("在 DBLP 上未找到标题匹配的正式发表版本。请检查标题是否被重命名 "
+              "（正式发表版本经常更改标题）、作者主页或 OpenReview。")
 
 
 def cmd_abstract(a):
@@ -200,13 +199,13 @@ def cmd_abstract(a):
             xml = get(url)
             ns = {"a": "http://www.w3.org/2005/Atom"}
             e = ET.fromstring(xml).find("a:entry", ns)
-            print(" ".join((e.findtext("a:summary", "", ns) or "").split()) if e is not None else "Not found")
+            print(" ".join((e.findtext("a:summary", "", ns) or "").split()) if e is not None else "未找到")
         else:
             pid = a.s2 if a.s2 else f"DOI:{a.doi}"
             data = json.loads(get(f"https://api.semanticscholar.org/graph/v1/paper/{urllib.parse.quote(pid)}?fields=title,abstract,year,venue") or "{}")
-            print(f"{data.get('title')} ({data.get('venue')} {data.get('year')})\n\n{data.get('abstract') or 'No abstract available from Semantic Scholar.'}")
+            print(f"{data.get('title')} ({data.get('venue')} {data.get('year')})\n\n{data.get('abstract') or 'Semantic Scholar 未提供摘要。'}")
     except ConnectionError as e:
-        print(f"Unreachable: {e}", file=sys.stderr); sys.exit(3)
+        print(f"不可达: {e}", file=sys.stderr); sys.exit(3)
 
 
 def main():
