@@ -1,0 +1,10 @@
+% STUB for testing only - NOT the official style file
+\NeedsTeXFormat{LaTeX2e}\ProvidesPackage{icml2026}
+\newif\ificmlaccepted\icmlacceptedfalse
+\DeclareOption{accepted}{\icmlacceptedtrue}\ProcessOptions\relax
+\RequirePackage{natbib}\RequirePackage{hyperref}
+\newcommand{\icmltitle}[1]{\twocolumn[\begin{center}{\Large\bfseries #1}\par\vspace{1em}\ificmlaccepted Real Authors\else Anonymous Authors\fi\end{center}]}
+\newcommand{\icmlauthor}[2]{}\newcommand{\icmlaffiliation}[2]{}\newcommand{\icmlcorrespondingauthor}[2]{}
+\newcommand{\icmltitlerunning}[1]{}\newcommand{\printAffiliationsAndNotice}[1]{}\newcommand{\icmlEqualContribution}{}
+\newcommand{\icmlkeywords}[1]{}
+\newenvironment{icmlauthorlist}{}{}

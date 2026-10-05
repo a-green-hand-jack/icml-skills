@@ -1,0 +1,27 @@
+\documentclass[letterpaper]{article}
+\usepackage{icml2026}
+\usepackage{graphicx,xcolor}
+\begin{document}
+\icmltitle{Adaptive Temperature Routing for Sparse Experts}
+\begin{icmlauthorlist}\icmlauthor{Jane Doe}{mit}\end{icmlauthorlist}
+\icmlaffiliation{mit}{Massachusetts Institute of Technology}
+\begin{abstract}
+We introduce a router that sets a sampling temperature per token in sparse mixture-of-experts models. Fixed temperatures cause expert collapse on long sequences, which wastes capacity. Our router predicts each temperature from the token representation and is trained jointly with the experts. On benchmark A it reaches 92.1\% accuracy, compared with 90.3\% for the strongest tuned baseline. These results suggest per-token temperatures are a cheap fix for routing collapse.
+\end{abstract}
+\section{Introduction}
+% TL;DR: Routing collapse limits sparse experts on long sequences.
+Sparse mixture-of-experts models route each token to a few experts \citep{shazeer2017}. Shazeer et al.\ observed that such routers collapse onto few experts. This collapse wastes most of the model capacity.
+
+\section{Results}
+% TL;DR: The router beats the strongest tuned baseline.
+Our router reaches 92.1\% accuracy, compared with 90.3\% for the baseline (Figure~\ref{fig:a}).
+\begin{figure}[t]
+\includegraphics[width=0.9\linewidth]{example-image}
+\caption{Accuracy over training; higher is better.}\label{fig:a}
+\end{figure}
+
+\section*{Impact Statement}
+This paper presents work whose goal is to advance the field of Machine Learning. There are many potential societal consequences of our work, none which we feel must be specifically highlighted here.
+\bibliographystyle{icml2026}
+\bibliography{refs}
+\end{document}
